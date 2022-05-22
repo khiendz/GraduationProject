@@ -11,6 +11,7 @@ using Server.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Server
@@ -30,11 +31,27 @@ namespace Server
             services.AddControllers();
             services.AddCors();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+               builder =>
+               {
+                   builder.SetIsOriginAllowed(_ => true)
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+               });
+            });
+
+            services.AddSingleton<HttpClient>();
+
             // configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,25 +64,25 @@ namespace Server
 
             app.UseHttpsRedirection();
 
+            app.UseCors("CorsPolicy");
+
             app.UseRouting();
 
-            // global cors policy
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors("Allow");
 
             // custom jwt auth middleware
             app.UseMiddleware<JwtMiddleware>();
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
             });
+            
         }
     }
 }
