@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Server.Helper;
+using Server.Hubs;
 using Server.Services;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace Server
         {
             services.AddControllers();
             services.AddCors();
+            services.AddSignalR();
 
             services.AddCors(options =>
             {
@@ -80,7 +82,7 @@ namespace Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
+                endpoints.MapHub<Chat>("/chat");
             });
             
         }

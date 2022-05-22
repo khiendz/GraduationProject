@@ -6,6 +6,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
+import { ChatComponent } from './pages/chat/chat.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
     path: 'change-password/:recoveryCode',
     component: ChangePasswordFormComponent,
     canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'chats',
+    component: ChatComponent,
   },
   {
     path: '**',
