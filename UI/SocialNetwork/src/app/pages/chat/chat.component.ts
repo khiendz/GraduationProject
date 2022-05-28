@@ -21,7 +21,7 @@ export class ChatComponent implements OnInit {
       const data = `Sent: ${this.message}`;
 
       if (this._hubConnection) {
-          this._hubConnection.invoke('Send', data);
+          this._hubConnection.invoke('Send',"khien", data);
       }
       this.messages.push(data);
   }

@@ -6,9 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Server.Helper;
-using Server.Hubs;
-using Server.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,11 +44,6 @@ namespace Server
 
             services.AddSingleton<HttpClient>();
 
-            // configure strongly typed settings object
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
-            // configure DI for application services
-            services.AddScoped<IUserService, UserService>();
 
             services.AddSignalR();
         }
@@ -72,9 +64,6 @@ namespace Server
 
             app.UseCors("Allow");
 
-            // custom jwt auth middleware
-            app.UseMiddleware<JwtMiddleware>();
-
             //app.UseAuthentication();
 
             //app.UseAuthorization();
@@ -82,7 +71,6 @@ namespace Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<Chat>("/chat");
             });
             
         }
