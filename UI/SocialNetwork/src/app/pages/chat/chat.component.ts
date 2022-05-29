@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import * as signalR from '@microsoft/signalr';
-import { HubConnection } from '@microsoft/signalr';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
+import { Message } from '../../shared/models/message.model';
 
 @Component({
   selector: 'app-chat',
@@ -9,35 +9,45 @@ import { HubConnection } from '@microsoft/signalr';
 })
 export class ChatComponent implements OnInit {
 
-  private _hubConnection: HubConnection | undefined;
-  public async: any;
-  message = '';
-  messages: string[] = [];
-
-  constructor() {
+  title = 'ClientApp';
+  txtMessage: string = '';
+  uniqueID: string = new Date().getTime().toString();
+  messages = new Array<Message>();
+  message = new Message();
+  constructor(
+    private chatService: ChatServiceService,
+    private _ngZone: NgZone
+  ) {
+    this.subscribeToEvents();
   }
-
-  public sendMessage(): void {
-      const data = `Sent: ${this.message}`;
-
-      if (this._hubConnection) {
-          this._hubConnection.invoke('Send',"khien", data);
-      }
-      this.messages.push(data);
+  handleInput(event: any) {
+    this.txtMessage = event.target!.value;
+ }
+  ngOnInit(): void {
   }
+  sendMessage(): void {
+    debugger
+    if (this.txtMessage) {
+      this.message = new Message();
+      this.message.clientuniqueid = this.uniqueID;
+      this.message.type = "sent";
+      this.message.message = this.txtMessage;
+      this.message.date = new Date();
+      this.messages.push(this.message);
+      this.chatService.sendMessage(this.message);
+      this.txtMessage = '';
+    }
+  }
+  private subscribeToEvents(): void {
 
-  ngOnInit() {
-      this._hubConnection = new signalR.HubConnectionBuilder()
-          .withUrl('https://localhost:44334/chat')
-          .configureLogging(signalR.LogLevel.Information)
-          .build();
-
-      this._hubConnection.start().catch(err => console.error(err.toString()));
-
-      this._hubConnection.on('Send', (data: any) => {
-          const received = `Received: ${data}`;
-          this.messages.push(received);
+    this.chatService.messageReceived.subscribe((message: Message) => {
+      this._ngZone.run(() => {
+        if (message.clientuniqueid !== this.uniqueID) {
+          message.type = "received";
+          this.messages.push(message);
+        }
       });
+    });
   }
 
 }

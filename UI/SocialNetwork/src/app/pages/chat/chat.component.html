@@ -1,36 +1,40 @@
-<div class="container-fluid">
-
-  <h1>Send some basic messages</h1>
-
-
-  <div class="row">
-      <form class="form-inline" (ngSubmit)="sendMessage()" #messageForm="ngForm">
-          <div class="form-group">
-              <label class="sr-only" for="message">Message</label>
-              <input type="text" class="form-control" id="message" placeholder="your message..." name="message" [(ngModel)]="message" required>
+<div class="container">
+  <h3 class=" text-center chat_header">Chat Application</h3>
+  <div class="messaging">
+    <div class="inbox_msg">
+      <div class="mesgs">
+        <div class="msg_history">
+          <div *ngFor="let msg of messages">
+          <div class="incoming_msg" *ngIf="msg.type == 'received'">
+            <div class="incoming_msg_img"> </div>
+            <div class="received_msg">
+              <div class="received_withd_msg">
+                <p>
+                 {{msg.message}}
+                </p>
+                <span class="time_date"> {{msg.date | date:'medium'}} </span>
+              </div>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary" [disabled]="!messageForm.valid">Send SignalR Message</button>
-      </form>
-  </div>
-  <div class="row" *ngIf="messages.length > 0">
-      <div class="table-responsive">
-          <table class="table table-striped">
-              <thead>
-                  <tr>
-                      <th>#</th>
-                      <th>Messages</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr *ngFor="let message of messages; let i = index">
-                      <td>{{i + 1}}</td>
-                      <td>{{message}}</td>
-                  </tr>
-              </tbody>
-          </table>
+          <div class="outgoing_msg" *ngIf="msg.type == 'sent'">
+            <div class="sent_msg">
+              <p>
+                  {{msg.message}}
+              </p>
+              <span class="time_date"> {{msg.date | date:'medium'}}</span>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="type_msg">
+          <div class="input_msg_write">
+            <input type="text" class="write_msg" [value]="txtMessage"
+            (input)="handleInput($event)" (keydown.enter)="sendMessage()" placeholder="Type a message" />
+            <button class="msg_send_btn" type="button"  (click)="sendMessage()"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+          </div>
+        </div>
       </div>
-  </div>
-  <div class="row" *ngIf="messages.length <= 0">
-      <span>No messages</span>
+    </div>
+
   </div>
 </div>

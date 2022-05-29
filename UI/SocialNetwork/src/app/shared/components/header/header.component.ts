@@ -49,6 +49,7 @@ export class HeaderComponent implements OnInit {
   toggleMenu = () => {
     this.menuToggle.emit();
   }
+
 }
 
 @NgModule({

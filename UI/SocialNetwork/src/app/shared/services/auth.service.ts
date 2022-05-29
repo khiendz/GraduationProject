@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import {  AuthenticationService } from '../services/authentication.service';
 
 export interface IUser {
   email: string;
@@ -24,13 +25,12 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, public authen: AuthenticationService) { }
 
   async logIn(email: string, password: string) {
 
     try {
       // Send request
-      console.log(email, password);
       this._user = { ...defaultUser, email };
       this.router.navigate([this._lastAuthenticatedPath]);
 
@@ -67,7 +67,6 @@ export class AuthService {
   async createAccount(email: string, password: string) {
     try {
       // Send request
-      console.log(email, password);
 
       this.router.navigate(['/create-account']);
       return {
@@ -85,7 +84,6 @@ export class AuthService {
   async changePassword(email: string, recoveryCode: string) {
     try {
       // Send request
-      console.log(email, recoveryCode);
 
       return {
         isOk: true
@@ -102,7 +100,6 @@ export class AuthService {
   async resetPassword(email: string) {
     try {
       // Send request
-      console.log(email);
 
       return {
         isOk: true
@@ -116,10 +113,12 @@ export class AuthService {
     }
   }
 
-  async logOut() {
+  public async logOut() {
     this._user = null;
+    this.authen.logout();
     this.router.navigate(['/login-form']);
   }
+
 }
 
 @Injectable()
