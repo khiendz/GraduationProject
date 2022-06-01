@@ -1,14 +1,22 @@
-<h2 class="content-block">Home</h2>
-<div class="search-results-container"
-    infinite-scroll
-    scrollWindow="false"
-    (scrolled)="onScrollDown($event)"
-    (scrolledUp)="onScrollUp($event)">
 
-      <div class="list-group">
-        <a class="list-group-item list-group-item-action" *ngFor="let i of listArray">
-          <p class="mb-1">{{i}} Item added on {{direction}}</p>
-        </a>
-      </div>
+        <div id="timeline">
+            <div>
+                            Random text
+            </div>
+        </div>
 
-</div>
+        <script type="text/javascript">
+                //detects when user reaches the end
+            window.addEventListener("scroll", function(){
+                var wrap = document.getElementById('timeline');
+                var contentHeight = wrap.offsetHeight;
+                var yOffset = window.pageYOffset;
+                var y = yOffset + window.innerHeight;
+                if(y >= contentHeight)
+                {
+                    //load new content
+                    wrap.innerHTML = wrap.innerHTML + "<div>Random text</div>";
+                }
+            })
+
+        </script>
