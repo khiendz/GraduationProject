@@ -9,6 +9,7 @@ import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 import { CommonModule } from '@angular/common';
 
 import { Router, NavigationEnd } from '@angular/router';
+import { ChatsModule } from 'src/app/shared/components/chat/chat.component';
 
 @Component({
   selector: 'app-side-nav-inner-toolbar',
@@ -100,7 +101,7 @@ export class SideNavInnerToolbarComponent implements OnInit {
 }
 
 @NgModule({
-  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule ],
+  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule, ChatsModule  ],
   exports: [ SideNavInnerToolbarComponent ],
   declarations: [ SideNavInnerToolbarComponent ]
 })

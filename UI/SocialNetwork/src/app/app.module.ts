@@ -12,11 +12,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor, JwtInterceptor } from 'src/_helpers';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { DxButtonModule, DxCheckBoxModule, DxHtmlEditorModule, DxTextBoxModule } from 'devextreme-angular';
+import { HomeComponent } from './pages/home/home.component';
+import { ChatsComponent } from './shared/components/chat/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatComponent
+    ChatComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +36,11 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    DxHtmlEditorModule,
+    DxCheckBoxModule,
+    DxButtonModule,
+    DxTextBoxModule
   ],
   providers: [
     AuthService,

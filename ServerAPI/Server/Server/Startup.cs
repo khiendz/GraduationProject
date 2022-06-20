@@ -99,8 +99,10 @@ namespace Server
 
                     }
                 });
+                swagger.UseAllOfToExtendReferenceSchemas();
             });
-
+            services.AddMvcCore().AddRazorViewEngine();
+            services.AddControllersWithViews();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

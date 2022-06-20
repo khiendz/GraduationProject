@@ -7,7 +7,6 @@
   [minSize]="minMenuSize"
   [shading]="shaderEnabled"
   [(opened)]="menuOpened">
-
   <app-side-navigation-menu
     [compactMode]="!menuOpened"
     [selectedItem]="selectedRoute"
@@ -45,7 +44,6 @@
       <div class="content">
         <ng-content></ng-content>
       </div>
-
       <div class="content-block">
         <ng-content select="app-footer"></ng-content>
       </div>

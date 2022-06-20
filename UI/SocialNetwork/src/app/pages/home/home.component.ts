@@ -1,52 +1,61 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NewsFeed } from 'src/app/shared/models/newsFeed.model';
+import { HomeService } from './home.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   templateUrl: 'home.component.html',
   styleUrls: [ './home.component.scss' ]
 })
 
-export class HomeComponent {
-  listArray : string[] = [];
-  sum = 20;
-  direction = "";
+export class HomeComponent implements OnInit{
+  isMultiline: boolean = true;
+  valueContent: string;
+  stateEditNewsFeed: boolean = false;
+  listNewsFeed: NewsFeed[] = [];
+  result: any;
+  title: string;
 
-  constructor() {
-    this.appendItems();
+  constructor(public service:HomeService)
+  {
   }
 
-
-  onScrollDown(ev: any) {
-    console.log("scrolled down!!", ev);
-
-    this.sum += 20;
-    this.appendItems();
-
-    this.direction = "scroll down";
+  async ngOnInit()
+  {
+    await Promise.all([
+      this.GetALL(),
+    ]);
   }
 
-  onScrollUp(ev: any) {
-    console.log("scrolled up!", ev);
-    this.sum += 20;
-    this.prependItems();
-
-    this.direction = "scroll up";
+  async GetALL()
+  {
+    debugger
+    this.listNewsFeed = await lastValueFrom(
+      this.service.GetAll()
+    );
   }
 
-  appendItems() {
-    this.addItems("push");
-  }
-
-  prependItems() {
-    this.addItems("unshift");
-  }
-
-  addItems(_method: string) {
-    for (let i = 0; i < this.sum; ++i) {
-      if( _method === 'push'){
-        this.listArray.push([i].join(""));
-      }else if( _method === 'unshift'){
-        this.listArray.unshift([i].join(""));
-      }
+  async Create()
+  {
+    let newFeed: NewsFeed = new NewsFeed();
+    newFeed.content = this.valueContent;
+    let today = new Date();
+    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    let dateTime = date+' '+time;
+    newFeed.datetimePost = new Date(dateTime);
+    newFeed.idAccount = "1";
+    this.result = await lastValueFrom(
+      this.service.Create(newFeed)
+    );
+    if(this.result)
+    {
+      window.location.reload();
     }
+  }
+
+  editNewsFeed(e:any)
+  {
+    this.stateEditNewsFeed = !this.stateEditNewsFeed;
   }
 }
