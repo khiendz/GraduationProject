@@ -19,6 +19,12 @@ import { SignUpComponent } from './shared/components/sign-up/sign-up.component';
 import { FriendService } from './shared/services/friend.service';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
+import { CameraComponent } from './pages/camera/camera.component';
+import { HomeVideoCallComponent } from './pages/home-video-call/home-video-call.component';
+import { ParticipantsComponent } from './pages/participants/participants.component';
+import { RoomsComponent } from './pages/rooms/rooms.component';
+import { SettingsComponent } from './pages/settings/settings.component';
+import { DeviceSelectComponent } from './pages/settings/device-select/device-select.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +33,12 @@ import { TasksComponent } from './pages/tasks/tasks.component';
     HomeComponent,
     SignUpComponent,
     ProfileComponent,
+    CameraComponent,
+    HomeVideoCallComponent,
+    ParticipantsComponent,
+    RoomsComponent,
+    SettingsComponent,
+    DeviceSelectComponent,
   ],
   imports: [
     BrowserModule,

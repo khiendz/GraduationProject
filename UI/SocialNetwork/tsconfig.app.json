@@ -15,5 +15,6 @@
   ],
   "include": [
     "src/**/*.d.ts"
-  ]
+  ],
+  "exclude": ["node_modules/twilio-video/tsdef/VideoProcessor.d.ts"]
 }

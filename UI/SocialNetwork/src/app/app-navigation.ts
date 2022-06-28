@@ -19,6 +19,10 @@ export const navigation = [
       {
         text: 'Chats',
         path: '/chats'
+      },
+      {
+        text: 'VideoCall',
+        path: '/call'
       }
     ]
   }

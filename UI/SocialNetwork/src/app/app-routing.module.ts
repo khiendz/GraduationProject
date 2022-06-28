@@ -7,6 +7,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
 import { ChatComponent } from './pages/chat/chat.component';
+import { HomeVideoCallComponent } from './pages/home-video-call/home-video-call.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
     path: 'chats',
     component: ChatComponent,
     canActivate: [ AuthGuardService ],
+  },
+  {
+    path: 'call',
+    component: HomeVideoCallComponent
   },
   {
     path: '**',

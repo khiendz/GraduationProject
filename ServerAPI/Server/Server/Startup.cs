@@ -18,6 +18,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Server.Hubs;
+using Server.Options;
+using Server.Services;
 
 namespace Server
 {
@@ -115,6 +117,18 @@ namespace Server
                });
             });
 
+            services.AddControllersWithViews();
+
+            services.Configure<TwilioSettings>(
+                settings =>
+                {
+                    settings.AccountSid = "ACc7c58239d9fa0c09a956e1289de0b56c";
+                    settings.ApiSecret = "c6VPBqSSvequZRES4Xi636Ya8ms6yNlX";
+                    settings.ApiKey = "SK3f48312b59af6d906121ddae24dec408";
+                })
+                .AddTransient<IVideoService, VideoService>();
+            var test = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID"); 
+
             services.AddSingleton<HttpClient>();
 
 
@@ -148,6 +162,7 @@ namespace Server
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<MessageHub>("/MessageHub");
+                endpoints.MapHub<NotificationHub>("/NotificationHub");
             });
             
         }
