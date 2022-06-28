@@ -12,15 +12,21 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor, JwtInterceptor } from 'src/_helpers';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { DxButtonModule, DxCheckBoxModule, DxHtmlEditorModule, DxTextBoxModule } from 'devextreme-angular';
+import { DxButtonModule, DxCheckBoxModule, DxDateBoxModule, DxFileUploaderModule, DxFormModule, DxHtmlEditorModule, DxTextAreaModule, DxTextBoxModule } from 'devextreme-angular';
 import { HomeComponent } from './pages/home/home.component';
 import { ChatsComponent } from './shared/components/chat/chat.component';
+import { SignUpComponent } from './shared/components/sign-up/sign-up.component';
+import { FriendService } from './shared/services/friend.service';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { TasksComponent } from './pages/tasks/tasks.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
-    HomeComponent
+    HomeComponent,
+    SignUpComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +46,11 @@ import { ChatsComponent } from './shared/components/chat/chat.component';
     DxHtmlEditorModule,
     DxCheckBoxModule,
     DxButtonModule,
-    DxTextBoxModule
+    DxTextBoxModule,
+    DxTextAreaModule,
+    DxDateBoxModule,
+    DxFormModule,
+    DxFileUploaderModule
   ],
   providers: [
     AuthService,

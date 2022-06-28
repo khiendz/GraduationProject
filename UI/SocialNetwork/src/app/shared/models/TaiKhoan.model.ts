@@ -16,7 +16,7 @@ export class TaiKhoan {
 
 }
 
-export class Acount {
+export class Account {
   public  Id:string;
   public  UserName:string;
   public  Password:string;

@@ -30,8 +30,6 @@ export class LoginFormComponent {
   ) {}
 
   async onSubmit(e: Event) {
-    debugger;
-
 
     e.preventDefault();
     const { username, password } = this.formData;
@@ -71,6 +69,11 @@ export class LoginFormComponent {
     // );
 
     // this.obj.refesh();
+  }
+
+  signUp()
+  {
+    this.router.navigateByUrl('');
   }
 
   onCreateAccountClick = () => {

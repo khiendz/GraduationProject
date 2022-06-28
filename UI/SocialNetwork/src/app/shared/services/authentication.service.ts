@@ -35,11 +35,8 @@ export class AuthenticationService {
         this.currentUserSubject.next(new User());
     }
 
-    register(username: string, password: string)
+    register(Email: string, Username :string, Password: string)
     {
-      return this.http.post<any>(`/authenticate/register`, { username, password })
-            .pipe(map(res => {
-              console.log(res);
-            }));
+      return this.http.post<any>(`/authenticate/register`, { Email, Username, Password });
     }
 }

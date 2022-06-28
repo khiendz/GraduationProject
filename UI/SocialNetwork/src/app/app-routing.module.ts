@@ -36,7 +36,11 @@ const routes: Routes = [
   },
   {
     path: 'create-account',
-    component: CreateAccountFormComponent,
+    component: CreateAccountFormComponent
+  },
+  {
+    path: 'change-password/:recoveryCode',
+    component: ChangePasswordFormComponent,
     canActivate: [ AuthGuardService ]
   },
   {
@@ -47,10 +51,11 @@ const routes: Routes = [
   {
     path: 'chats',
     component: ChatComponent,
+    canActivate: [ AuthGuardService ],
   },
   {
     path: '**',
-    redirectTo: 'home'
+    redirectTo: 'home',
   }
 ];
 
@@ -59,8 +64,7 @@ const routes: Routes = [
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [
-    ProfileComponent,
-    TasksComponent
-  ]
+    TasksComponent,
+  ],
 })
 export class AppRoutingModule { }

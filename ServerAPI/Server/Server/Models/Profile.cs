@@ -10,9 +10,31 @@ namespace Server.Models
     [Table("Profile")]
     public class Profile
     {
+        public Profile()
+        {
+        }
+
+        public Profile(string id, string idAccount)
+        {
+            this.id = id;
+            this.idAccount = idAccount;
+        }
+
+        public Profile(string id, string avartar, string name, string date, string sex, string age, string location, string idAccount)
+        {
+            this.id = id;
+            this.avatar = avartar;
+            this.name = name;
+            this.date = date;
+            this.sex = sex;
+            this.age = age;
+            this.location = location;
+            this.idAccount = idAccount;
+        }
+
         [Key]
         public string id { get; set; }
-        public string avartart { get; set; }
+        public string avatar { get; set; }
         public string name { get; set; }
         public string date { get; set; }
         public string sex { get; set; }

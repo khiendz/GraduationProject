@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Server.Authentication;
+using Server.Entity;
 using Server.Models;
 
 namespace Server.Controllers
@@ -22,23 +23,37 @@ namespace Server.Controllers
         }
 
         // GET: Friends
-        [HttpGet("Get")]
-        public async Task<IActionResult> Index()
+        [HttpGet("Get/{idAcount}")]
+        public async Task<IActionResult> Index(string idAcount)
         {
-            return Ok(await _context.Friends.ToListAsync());
+            var friends = await _context.Friends.Where(data => data.idAccount == idAcount).ToListAsync();
+            var result = new List<FriendsResponse>();
+            friends.ForEach( data =>
+            {
+                var objProfile = _context.Profiles.FirstOrDefault(data => data.idAccount == data.idAccount);
+                var objResult = new FriendsResponse();
+                objResult.friend = data;
+                if (objProfile != null)
+                {
+                    objResult.profile = objProfile;
+                }    
+                result.Add(objResult);
+            }
+            );
+            return Ok(new { Result = result });
         }
 
         // GET: Friends/Details/5
-        [HttpGet("details/{id}")]
-        public async Task<IActionResult> Details(string id)
+        [HttpGet("details/{idAcount}")]
+        public async Task<IActionResult> Details(string idAccount)
         {
-            if (id == null)
+            if (idAccount == null)
             {
                 return NotFound();
             }
 
             var friend = await _context.Friends
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.idAccount == idAccount);
             if (friend == null)
             {
                 return NotFound();
@@ -66,10 +81,10 @@ namespace Server.Controllers
         // POST: Friends/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Edit/{id}")]
-        public async Task<IActionResult> Edit(string id, [FromBody] Friend friend)
+        [HttpPost("Edit/{idAcount}")]
+        public async Task<IActionResult> Edit(string idAccount, [FromBody] Friend friend)
         {
-            if (id != friend.id)
+            if (idAccount != friend.idAccount)
             {
                 return NotFound();
             }
@@ -83,7 +98,7 @@ namespace Server.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FriendExists(friend.id))
+                    if (!FriendExists(friend.idAccount))
                     {
                         return NotFound();
                     }
@@ -98,19 +113,19 @@ namespace Server.Controllers
         }
 
         // POST: Friends/Delete/5
-        [HttpPost("Delete/{id}")]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        [HttpPost("Delete/{idAcount}")]
+        public async Task<IActionResult> DeleteConfirmed(string idAccount)
         {
-            var friend = await _context.Friends.FindAsync(id);
+            var friend = await _context.Friends.FindAsync(idAccount);
             _context.Friends.Remove(friend);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet("Exist/{id}")]
-        private bool FriendExists(string id)
+        [HttpGet("Exist/{idAcount}")]
+        private bool FriendExists(string idAccount)
         {
-            return _context.Friends.Any(e => e.id == id);
+            return _context.Friends.Any(e => e.idAccount == idAccount);
         }
     }
 }

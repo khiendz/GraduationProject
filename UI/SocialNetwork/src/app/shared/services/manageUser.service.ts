@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http'
 import { Observable } from 'rxjs';
-import { Acount, TaiKhoan } from '../models/TaiKhoan.model';
+import { Account, TaiKhoan } from '../models/TaiKhoan.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,9 +15,9 @@ export class ManageUser {
     return this.http.get<TaiKhoan[]>(`/manageuser/get-all`);
   }
 
-  getListUser():Observable<Acount[]>
+  getListUser():Observable<Account[]>
   {
-    return this.http.get<Acount[]>(`/manageuser/get-all-user`);
+    return this.http.get<Account[]>(`/manageuser/get-all-user`);
   }
 
   getUserByUserName(id:string):Observable<any>

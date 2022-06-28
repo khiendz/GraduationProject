@@ -1,17 +1,36 @@
-<h2 class="content-block">Profile</h2>
-
-<div class="content-block dx-card responsive-paddings">
-  <div class="form-avatar">
-    <img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/{{employee.Picture}}"/>
-  </div>
-  <span>{{employee.Notes}}</span>
-</div>
-
-<div class="content-block dx-card responsive-paddings">
-  <dx-form id="form"
-    [formData]="employee"
-    labelLocation="top"
-    [colCountByScreen]="colCountByScreen"
-  >
-  </dx-form>
-</div>
+<form action="your-action" (submit)="submitForm()">
+<dx-form id="form" [formData]="profile">
+  <dxi-item itemType="group" cssClass="first-group" [colCount]="4">
+    <br>
+    <dxi-item dataField="avatar">
+      <div id="form-avatar"></div>
+      <div id="fileuploader-container">
+        <dx-file-uploader
+          selectButtonText="Select photo"
+          labelText=""
+          accept="image/*"
+          uploadMode="useForm"
+          (onValueChanged)="updateClick($event)"
+        >
+        </dx-file-uploader>
+      </div>
+    </dxi-item>
+  </dxi-item>
+  <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+    <dxi-item itemType="group">
+      <dxi-item dataField="name"></dxi-item>
+      <dxi-item dataField="date"   editorType="dxDateBox"
+      [editorOptions]="{ width: '100%' }"></dxi-item>
+      <dxi-item dataField="sex"></dxi-item>
+      <dxi-item dataField="age"></dxi-item>
+      <dxi-item dataField="location"></dxi-item>
+    </dxi-item>
+  </dxi-item>
+  <dxi-item
+  itemType="button"
+  horizontalAlignment="left"
+  [buttonOptions]="buttonOptions"
+>
+</dxi-item>
+</dx-form>
+</form>

@@ -10,6 +10,19 @@ namespace Server.Models
     [Table("Account")]
     public class Account
     {
+
+        public Account()
+        {
+
+        }
+
+        public Account(Guid _idAccount, string username, string password)
+        {
+            this.idAccount = _idAccount.ToString();
+            this.userName = username;
+            this.password = password;
+        }
+
         [Key]
         public string idAccount { get; set; }
         public string userName { get; set; }

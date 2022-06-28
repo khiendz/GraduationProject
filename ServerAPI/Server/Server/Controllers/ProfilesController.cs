@@ -29,16 +29,16 @@ namespace Server.Controllers
         }
 
         // GET: Profiles/Details/5
-        [HttpGet("details/{id}")]
-        public async Task<IActionResult> Details(string id)
+        [HttpGet("details/{idAccount}")]
+        public async Task<IActionResult> Details(string idAccount)
         {
-            if (id == null)
+            if (idAccount == null)
             {
                 return NotFound();
             }
 
             var profile = await _context.Profiles
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.idAccount == idAccount);
             if (profile == null)
             {
                 return NotFound();
@@ -66,10 +66,10 @@ namespace Server.Controllers
         // POST: Profiles/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("edit")]
-        public async Task<IActionResult> Edit(string id, [FromBody] Profile profile)
+        [HttpPost("edit/{idAccount}")]
+        public async Task<IActionResult> Edit(string idAccount, [FromBody] Profile profile)
         {
-            if (id != profile.id)
+            if (idAccount != profile.idAccount)
             {
                 return NotFound();
             }
@@ -83,7 +83,7 @@ namespace Server.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProfileExists(profile.id))
+                    if (!ProfileExists(profile.idAccount))
                     {
                         return NotFound();
                     }
@@ -98,18 +98,18 @@ namespace Server.Controllers
         }
 
         // POST: Profiles/Delete/5
-        [HttpPost("delete/{id}")]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        [HttpPost("delete/{idAccount}")]
+        public async Task<IActionResult> DeleteConfirmed(string idAccount)
         {
-            var profile = await _context.Profiles.FindAsync(id);
+            var profile = await _context.Profiles.FindAsync(idAccount);
             _context.Profiles.Remove(profile);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        [HttpGet("Exits/{id}")]
-        private bool ProfileExists(string id)
+        [HttpGet("Exits/{idAccount}")]
+        private bool ProfileExists(string idAccount)
         {
-            return _context.Profiles.Any(e => e.id == id);
+            return _context.Profiles.Any(e => e.idAccount == idAccount);
         }
     }
 }

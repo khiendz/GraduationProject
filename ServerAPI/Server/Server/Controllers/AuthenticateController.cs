@@ -10,6 +10,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Controllers
 {
@@ -19,9 +21,11 @@ namespace Server.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext context;
 
-        public AuthenticateController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public AuthenticateController(UserManager<ApplicationUser> userManager, IConfiguration configuration, ApplicationDbContext _context)
         {
+            this.context = _context;
             this.userManager = userManager;
             _configuration = configuration;
         }
@@ -56,10 +60,14 @@ namespace Server.Controllers
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
 
+                var idAccount = context?.Accounts?.FirstOrDefaultAsync(data => data.userName == model.Username)?.Result?.idAccount;
+
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    expiration = token.ValidTo, 
+                    user = model.Username,
+                    idAccount = idAccount,
                 });
             }
             return Unauthorized();
@@ -82,6 +90,18 @@ namespace Server.Controllers
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+
+            try
+            {
+                var account = new Account(Guid.NewGuid(), model.Username, model.Password);
+                _ = await this.context.Accounts.AddAsync(account);
+                _ = await this.context.Profiles.AddAsync(new Profile(Guid.NewGuid().ToString(),account.idAccount.ToString()));
+                _ = await this.context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = e.Message });
+            }
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
