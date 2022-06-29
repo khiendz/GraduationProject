@@ -15,6 +15,8 @@ export class HomeComponent implements OnInit{
   listNewsFeed: NewsFeed[] = [];
   result: any;
   title: string;
+  clientId : any;
+  uniqueID : any;
 
   constructor(public service:HomeService)
   {
@@ -25,6 +27,11 @@ export class HomeComponent implements OnInit{
     await Promise.all([
       this.GetALL(),
     ]);
+
+    this.clientId = localStorage.getItem('currentUser')
+    ? JSON.parse(localStorage.getItem('currentUser') || '')
+    : [];
+  this.uniqueID = this.clientId.user;
   }
 
   async GetALL()
@@ -52,6 +59,11 @@ export class HomeComponent implements OnInit{
     {
       window.location.reload();
     }
+  }
+
+  back()
+  {
+    this.stateEditNewsFeed = !this.stateEditNewsFeed;
   }
 
   editNewsFeed(e:any)

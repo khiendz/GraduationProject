@@ -67,9 +67,9 @@ export class SettingsComponent implements OnInit, OnDestroy  {
   async showPreviewCamera() {
       this.isPreviewing = true;
 
-      if (!this.camera.videoTrack || this.videoDeviceId !== this.video.selectedId) {
-          this.videoDeviceId = this.video.selectedId;
-          const videoDevice : any = this.devices.find(d => d.deviceId === this.video.selectedId);
+      if (!this.camera.videoTrack || this.videoDeviceId !== this.video?.selectedId) {
+          this.videoDeviceId = this.video?.selectedId;
+          const videoDevice : any = this.devices.find(d => d.deviceId === this.video?.selectedId);
           await this.camera.initializePreview(videoDevice.deviceId);
       }
 
@@ -79,16 +79,16 @@ export class SettingsComponent implements OnInit, OnDestroy  {
   hidePreviewCamera() {
       this.isPreviewing = false;
       this.camera.finalizePreview();
-      return this.devices.find(d => d.deviceId === this.video.selectedId);
+      return this.devices.find(d => d.deviceId === this.video?.selectedId);
   }
 
   private handleDeviceAvailabilityChanges() {
-      if (this.devices && this.devices.length && this.video && this.video.selectedId) {
-          let videoDevice = this.devices.find(d => d.deviceId === this.video.selectedId);
+      if (this.devices && this.devices.length && this.video && this.video?.selectedId) {
+          let videoDevice = this.devices.find(d => d.deviceId === this.video?.selectedId);
           if (!videoDevice) {
               videoDevice = this.devices.find(d => d.kind === 'videoinput');
               if (videoDevice) {
-                  this.video.selectedId = videoDevice.deviceId;
+                  this.video.selectedId = videoDevice?.deviceId;
                   this.onSettingsChanged(videoDevice);
               }
           }

@@ -43,7 +43,13 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.getUser().then((e) => this.user = e.data);
+    debugger
+    this.authService.getUser().then((e) => {
+      debugger
+      this.user = e.data
+      document.getElementById('user-image')?.setAttribute('style',`background: url("${e.data?.avatarUrl}") no-repeat #fff !important; background-size: contain !important;`);
+
+    });
   }
 
   toggleMenu = () => {

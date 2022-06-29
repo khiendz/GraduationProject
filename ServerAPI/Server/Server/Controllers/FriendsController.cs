@@ -113,10 +113,10 @@ namespace Server.Controllers
         }
 
         // POST: Friends/Delete/5
-        [HttpPost("Delete/{idAcount}")]
-        public async Task<IActionResult> DeleteConfirmed(string idAccount)
+        [HttpGet("Delete/{idAccount}/{idFriend}")]
+        public async Task<IActionResult> DeleteConfirmed(string idAccount, string idFriend)
         {
-            var friend = await _context.Friends.FindAsync(idAccount);
+            var friend = _context.Friends.FirstOrDefault(data => data.idAccount == idAccount && data.idFriend == idFriend);
             _context.Friends.Remove(friend);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

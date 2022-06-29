@@ -9,7 +9,7 @@ const apiUrl = {
   addFriedd : '/friends/create',
   detailsFriend: '/friends/details/{0}',
   updateFriend : '/friends/edit/{0}',
-  deleteFriend : '/friends/delete/{0}',
+  deleteFriend : '/friends/delete/{0}/{1}',
   exist : 'friends/exist/{0}'
 };
 @Injectable({
@@ -39,9 +39,10 @@ export class FriendService {
     const requestUrl = String.Format(apiUrl.updateFriend,friend.idAccount);
     return this.httpClient.post(requestUrl,friend);
   }
-  public deleteFriend(idAccount:string)
+  public deleteFriend(idAccount:string, idFriend: string)
   {
-    const requestUrl = String.Format(apiUrl.deleteFriend,idAccount);
+    debugger
+    const requestUrl = String.Format(apiUrl.deleteFriend,idAccount,idFriend);
     return this.httpClient.get(requestUrl);
   }
   public exist(idAccount:string)

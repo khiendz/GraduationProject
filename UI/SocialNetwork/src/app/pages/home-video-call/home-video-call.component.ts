@@ -39,7 +39,7 @@ export class HomeVideoCallComponent implements OnInit {
   async ngOnInit() {
     const builder = new HubConnectionBuilder()
       .configureLogging(LogLevel.Information)
-      .withUrl(`${environment.apiUrl}/notificationHub`);
+      .withUrl(`https://192.168.1.123:5000/notificationHub`);
 
     this.notificationHub = builder.build();
     this.notificationHub.on('RoomsUpdated', async (updated) => {
@@ -70,33 +70,41 @@ export class HomeVideoCallComponent implements OnInit {
       this.activeRoom.removeAllListeners();
     }
 
-    const videoDevice : any = this.settings.hidePreviewCamera();
+    const videoDevice: any = this.settings.hidePreviewCamera();
     await this.camera.initializePreview(videoDevice && videoDevice.deviceId);
 
     this.participants.clear();
   }
 
   async onRoomChanged(roomName: string) {
-    debugger
+    debugger;
     if (roomName) {
       if (this.activeRoom) {
         this.activeRoom.disconnect();
       }
 
-      this.camera.finalizePreview();
+      try
+      {
 
-      const tracks = await Promise.all([
-        createLocalAudioTrack(),
-        this.settings.showPreviewCamera(),
-      ]);
+        this.camera.finalizePreview();
 
-      this.activeRoom = await this.videoChatService.joinOrCreateRoom(
-        roomName,
-        tracks
-      );
+        const tracks = await Promise.all([
+          createLocalAudioTrack(),
+          this.settings.showPreviewCamera(),
+        ]);
 
-      this.participants.initialize(this.activeRoom.participants);
-      this.registerRoomEvents();
+        this.activeRoom = await this.videoChatService.joinOrCreateRoom(
+          roomName,
+          tracks
+        );
+
+        this.participants.initialize(this.activeRoom.participants);
+        this.registerRoomEvents();
+
+      }catch(e: any)
+      {
+
+      }
 
       this.notificationHub.send('RoomsUpdated', true);
     }

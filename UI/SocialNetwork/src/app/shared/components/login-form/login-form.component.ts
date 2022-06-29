@@ -73,6 +73,7 @@ export class LoginFormComponent {
 
   signUp()
   {
+    debugger
     this.router.navigateByUrl('');
   }
 

@@ -24,11 +24,12 @@ export class CreateAccountFormComponent {
 
   async onSubmit(e: Event) {
     e.preventDefault();
-    const { email, userName, password } = this.formData;
+    debugger
+    const { email, name, password } = this.formData;
     this.loading = true;
 
     await this.authService
-      .register(email, userName, password)
+      .register(email, name, password)
       .subscribe((data) => {
         const result = data;
         this.loading = false;

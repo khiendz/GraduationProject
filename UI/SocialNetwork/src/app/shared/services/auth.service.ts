@@ -8,9 +8,12 @@ export interface IUser {
 }
 
 const defaultPath = '/';
+const clientUser = localStorage.getItem('currentUser')
+? JSON.parse(localStorage.getItem('currentUser') || '')
+: [];
 const defaultUser = {
-  email: 'sandra@example.com',
-  avatarUrl: 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png'
+  email: clientUser.email,
+  avatarUrl: clientUser.avatar
 };
 
 @Injectable()
@@ -19,7 +22,7 @@ export class AuthService {
   get loggedIn(): boolean {
     return !!this._user;
   }
-
+  clientId: any;
   private _lastAuthenticatedPath: string = defaultPath;
   set lastAuthenticatedPath(value: string) {
     this._lastAuthenticatedPath = value;
@@ -30,8 +33,23 @@ export class AuthService {
   async logIn(email: string, password: string) {
 
     try {
+      debugger
       // Send request
-      this._user = { ...defaultUser, email };
+      this.clientId = localStorage.getItem('currentUser')
+      ? JSON.parse(localStorage.getItem('currentUser') || '')
+      : [];
+
+      if(this.clientId != [])
+      {
+        let _defaultUser = {
+          email: this.clientId.email,
+          avatarUrl: this.clientId.avatar
+        };
+        this._user = { ..._defaultUser, email };
+        this._user.email = _defaultUser.email;
+        this._user.avatarUrl = _defaultUser.avatarUrl;
+      }
+
       this.router.navigate([this._lastAuthenticatedPath]);
 
       return {
@@ -126,6 +144,7 @@ export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
+    debugger
     const isLoggedIn = this.authService.loggedIn;
     const isAuthForm = [
       'login-form',

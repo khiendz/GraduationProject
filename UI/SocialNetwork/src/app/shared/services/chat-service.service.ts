@@ -2,7 +2,17 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from 'src/environments/environment';
 import { Message } from '../models/message.model';
+import {HttpClient} from '@angular/common/http';
+import { String } from 'typescript-string-operations';
 
+const apiUrl = {
+  getFriend : '/messages/getlistmessage/{0}/{1}',
+  addFriedd : '/messages/create',
+  detailsFriend: '/messages/details/{0}',
+  updateFriend : '/messages/edit/{0}',
+  deleteFriend : '/messages/delete/{0}',
+  exist : 'messages/exist/{0}'
+};
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +23,7 @@ export class ChatServiceService {
   private connectionIsEstablished = false;
   private _hubConnection: HubConnection;
 
-  constructor() {
+  constructor(public httpClient: HttpClient) {
     this.createConnection();
     this.registerOnServerEvents();
     this.startConnection();
@@ -25,7 +35,7 @@ export class ChatServiceService {
 
   private createConnection() {
     this._hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.apiUrl + '/MessageHub')
+      .withUrl('https://localhost:44334/MessageHub')
       .build();
   }
 
@@ -47,5 +57,12 @@ export class ChatServiceService {
     this._hubConnection.on('MessageReceived', (data: any) => {
       this.messageReceived.emit(data);
     });
+  }
+
+  public getSourceMessage(name: string, clientTo: string)
+  {
+    debugger
+    const requestUrl = String.Format(apiUrl.getFriend,name,clientTo);
+    return this.httpClient.get(requestUrl);
   }
 }

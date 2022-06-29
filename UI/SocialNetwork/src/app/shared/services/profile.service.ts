@@ -5,6 +5,7 @@ import { String } from 'typescript-string-operations';
 
 const apiUrl = {
   getProfile : '/profiles/get/{0}',
+  getAll : '/profiles/get',
   addProfile: '/profiles/create',
   detailsProfile: '/profiles/details/{0}',
   updateProfile : '/profiles/edit/{0}',
@@ -17,6 +18,12 @@ const apiUrl = {
 export class ProfileService {
 
   constructor(private httpClient: HttpClient) { }
+
+  public getList()
+  {
+    const requestUrl = String.Format(apiUrl.getAll);
+    return this.httpClient.get(requestUrl);
+  }
 
   public get(idAccount: string)
   {

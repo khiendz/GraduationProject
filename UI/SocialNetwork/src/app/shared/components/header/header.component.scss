@@ -13,7 +13,6 @@
 
 ::ng-deep .dx-toolbar.header-toolbar .dx-toolbar-items-container .dx-toolbar-after {
   padding: 0 40px;
-
   :host-context(.screen-x-small) & {
     padding: 0 20px;
   }
@@ -38,4 +37,9 @@
   .user-button>.dx-button-content {
     padding: 3px;
   }
+}
+
+::ng-deep .header-parent .dx-toolbar-items-container
+{
+  height: 96px;
 }

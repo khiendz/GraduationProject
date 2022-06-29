@@ -61,6 +61,7 @@ namespace Server.Controllers
                     );
 
                 var idAccount = context?.Accounts?.FirstOrDefaultAsync(data => data.userName == model.Username)?.Result?.idAccount;
+                var avatar = context?.Profiles?.FirstOrDefaultAsync(data => data.name == model.Username)?.Result?.avatar;
 
                 return Ok(new
                 {
@@ -68,6 +69,8 @@ namespace Server.Controllers
                     expiration = token.ValidTo, 
                     user = model.Username,
                     idAccount = idAccount,
+                    email = user.Email,
+                    avatar = avatar,
                 });
             }
             return Unauthorized();

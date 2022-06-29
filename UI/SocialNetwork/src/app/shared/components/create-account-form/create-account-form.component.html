@@ -8,11 +8,8 @@
       <dxo-label [visible]="false"></dxo-label>
     </dxi-item>
 
-    <dxi-item dataField="userName" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'User Name', mode: 'text' }">
-      <dxi-validation-rule type="required" message="User Name is required"></dxi-validation-rule>
-      <dxi-validation-rule type="text" message="User Name is invalid"></dxi-validation-rule>
-      <dxo-label [visible]="false"></dxo-label>
+    <dxi-item dataField="name" editorType="dxTextBox"
+      [editorOptions]="{ stylingMode: 'filled', placeholder: 'User Name', mode: 'name' }">
     </dxi-item>
 
     <dxi-item dataField="password" editorType="dxTextBox"

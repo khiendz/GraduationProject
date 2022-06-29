@@ -1,5 +1,8 @@
-<dx-button icon="edit" (onClick)="editNewsFeed($event)"
-  >Post news feed</dx-button
+<br>
+<h3 class=" text-center chat_header">New feeds</h3>
+<br>
+<dx-button (onClick)="editNewsFeed($event)" type="default" *ngIf="!stateEditNewsFeed"
+  >Hey {{uniqueID}},  what are you thinking?</dx-button
 >
 <hr />
 <dx-html-editor
@@ -67,16 +70,10 @@
     <dxi-item name="insertColumnRight"></dxi-item>
     <dxi-item name="deleteColumn"></dxi-item>
     <dxi-item><dx-button text="Save" icon="save" (onClick)="Create()"></dx-button></dxi-item>
+    <dxi-item><dx-button text="Back" icon="undo" (onClick)="back()"></dx-button></dxi-item>
   </dxo-toolbar>
   <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
 </dx-html-editor>
-
-<div class="options">
-  <div class="caption">Options</div>
-  <div class="option">
-    <dx-check-box text="Multiline toolbar"></dx-check-box>
-  </div>
-</div>
 
 <div *ngFor="let newsFeed of listNewsFeed; let i = index">
   <div [innerHTML]="newsFeed.content"></div>

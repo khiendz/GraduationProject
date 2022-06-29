@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { any } from 'codelyzer/util/function';
 import { Friend } from 'src/app/shared/models/friend.model';
 import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
 import { FriendService } from 'src/app/shared/services/friend.service';
@@ -16,8 +17,11 @@ export class ChatComponent implements OnInit {
   messages = new Array<Message>();
   message = new Message();
   chatDisplay: boolean = false;
-  friends: Friend[] = [];
+  friends: any;
+  listFriends: Friend[] = [];
   clientId: any;
+  valueSelectFriend: string;
+  stateChat: boolean = false;
   constructor(
     private chatService: ChatServiceService,
     private friendService: FriendService,
@@ -35,10 +39,34 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
     this.friendService.getFriend(this.clientId.idAccount).subscribe((res:any) =>
     {
-      this.friends = res;
       debugger
+      this.friends = res;
+      this.friends.result.forEach((data: any) =>
+        {
+          if(data.friend.idAccount == this.clientId.idAccount)
+          this.listFriends.push(data.friend);
+        });
     });
   }
+
+  getSourceMessage()
+  {
+    this.chatService.getSourceMessage(this.uniqueID,this.valueSelectFriend).subscribe((data :any) =>
+      {
+        data.forEach((obj:Message) => {
+          debugger
+          if(obj.clientuniqueid == this.clientId.user)
+          {
+            this.messages.push(obj);
+          }else
+          {
+            obj.type = 'received';
+            this.messages.push(obj);
+          }
+        });
+      });
+  }
+
   sendMessage(): void {
     debugger;
     if (this.txtMessage) {
@@ -47,11 +75,16 @@ export class ChatComponent implements OnInit {
       this.message.type = 'sent';
       this.message.message = this.txtMessage;
       this.message.date = new Date();
-      this.message.clientTo = 'khien';
+      this.message.clientTo = this.valueSelectFriend;
       this.messages.push(this.message);
       this.chatService.sendMessage(this.message);
       this.txtMessage = '';
     }
+  }
+
+  selectFriend()
+  {
+    this.getSourceMessage();
   }
   private subscribeToEvents(): void {
     if (this.uniqueID == '') {

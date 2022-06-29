@@ -3,6 +3,14 @@
 </div>
 <div class="container" *ngIf="!chatDisplay">
   <h3 class=" text-center chat_header">Chat With</h3>
+  <dx-select-box
+  [dataSource]="listFriends"
+  displayExpr="name"
+  valueExpr="name"
+  [(value)]="valueSelectFriend"
+  (onValueChanged)="selectFriend()"
+  >
+  </dx-select-box>
   <div class="messaging">
     <div class="inbox_msg">
       <div class="mesgs">

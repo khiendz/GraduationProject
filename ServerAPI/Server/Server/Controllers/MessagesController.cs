@@ -28,6 +28,13 @@ namespace Server.Controllers
             return Ok(await _context.Messages.ToListAsync());
         }
 
+        // GET: Messages
+        [HttpGet("GetListMessage/{name}/{clientTo}")]
+        public async Task<IActionResult> GetListMessage(string name, string clientTo)
+        {
+            return Ok(await _context.Messages.Where(data => (data.clientTo == clientTo && data.clientuniqueid == name) || (data.clientTo == name && data.clientuniqueid == clientTo) ).ToListAsync());
+        }
+
         // GET: Messages/Details/5
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(string id)

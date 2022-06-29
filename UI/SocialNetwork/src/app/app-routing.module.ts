@@ -69,7 +69,6 @@ const routes: Routes = [
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [
-    TasksComponent,
   ],
 })
 export class AppRoutingModule { }
