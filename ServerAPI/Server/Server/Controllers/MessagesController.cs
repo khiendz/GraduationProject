@@ -65,9 +65,9 @@ namespace Server.Controllers
                 message.clientuniqueid = Guid.NewGuid().ToString();
                 _context.Add(message);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Send message success" });
             }
-            return Ok(message);
+            return Ok(new { Result = "Fail" });
         }
 
         // POST: Messages/Edit/5
@@ -99,7 +99,7 @@ namespace Server.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Update message success" });
             }
             return Ok(message);
         }
@@ -111,7 +111,7 @@ namespace Server.Controllers
             var message = await _context.Messages.FindAsync(id);
             _context.Messages.Remove(message);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(new { Result = "Delete message success" });
         }
 
         [HttpGet("exists/{id}")]

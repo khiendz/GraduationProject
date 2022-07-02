@@ -58,9 +58,9 @@ namespace Server.Controllers
                 newFeed.id = Guid.NewGuid().ToString();
                 _context.Add(newFeed);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Create new feeds success" });
             }
-            return Ok(newFeed);
+            return Ok(new { Result = "Create new feeds fail" });
         }
 
         // POST: NewFeeds/Edit/5
@@ -92,7 +92,7 @@ namespace Server.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Update new feeds success" });
             }
             return Ok(newFeed);
         }
@@ -104,7 +104,7 @@ namespace Server.Controllers
             var newFeed = await _context.NewFeeds.FindAsync(id);
             _context.NewFeeds.Remove(newFeed);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(new { Result = "Delete new feeds success" });
         }
 
         [HttpGet("exits/{id}")]

@@ -73,9 +73,9 @@ namespace Server.Controllers
                 friend.id = Guid.NewGuid().ToString();
                 _context.Add(friend);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Added friend success"});
             }
-            return Ok(friend);
+            return Ok(new { Result = "Added friend fail" });
         }
 
         // POST: Friends/Edit/5
@@ -107,9 +107,9 @@ namespace Server.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Updated friend success" });
             }
-            return Ok(friend);
+            return Ok(new { Result = "Updated friend fail" });
         }
 
         // POST: Friends/Delete/5
@@ -119,7 +119,7 @@ namespace Server.Controllers
             var friend = _context.Friends.FirstOrDefault(data => data.idAccount == idAccount && data.idFriend == idFriend);
             _context.Friends.Remove(friend);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(new { Result = "Update friend success" });
         }
 
         [HttpGet("Exist/{idAcount}")]

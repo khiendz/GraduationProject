@@ -1,0 +1,7 @@
+{
+  "/api/*": {
+      "target": "http://socialnetwork.somee.com",
+      "secure": false,
+      "logLevel": "debug"
+  }
+}

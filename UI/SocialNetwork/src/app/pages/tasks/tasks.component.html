@@ -1,6 +1,7 @@
 <h2 class="content-block">Search and add friend</h2>
 
 <dx-data-grid
+  #grid
   class="dx-card wide-card"
   [dataSource]="profileSource"
   [showBorders]="false"
@@ -46,7 +47,7 @@
     cellTemplate="cellTemplateButton"
   ></dxi-column>
   <div *dxTemplate="let data of 'cellTemplateButton'">
-   <dx-button *ngIf="checkAdded(data)" icon="add" (onClick)="addFriend(data.data.idAccount)" type="success" style="margin-right: 5px;"></dx-button>
-   <dx-button *ngIf="!checkAdded(data)" icon="remove" (onClick)="deleteFriend(data.data.idAccount)" type="default"></dx-button>
+   <dx-button *ngIf="checkAdded(data)" icon="add" (onClick)="addFriend(data)" type="success" style="margin-right: 5px;"></dx-button>
+   <dx-button *ngIf="!checkAdded(data)" icon="remove" (onClick)="deleteFriend(data)" type="default"></dx-button>
   </div>
 </dx-data-grid>

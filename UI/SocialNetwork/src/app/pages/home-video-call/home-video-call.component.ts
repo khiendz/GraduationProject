@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import {
   createLocalAudioTrack,
   Room,
@@ -24,7 +24,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './home-video-call.component.html',
   styleUrls: ['./home-video-call.component.scss'],
 })
-export class HomeVideoCallComponent implements OnInit {
+export class HomeVideoCallComponent implements OnInit, OnDestroy{
   @ViewChild('rooms') rooms: RoomsComponent;
   @ViewChild('camera') camera: CameraComponent;
   @ViewChild('settings') settings: SettingsComponent;
@@ -35,11 +35,15 @@ export class HomeVideoCallComponent implements OnInit {
   private notificationHub: HubConnection;
 
   constructor(private readonly videoChatService: VideochatService) {}
+  ngOnDestroy(): void {
+    this.activeRoom.disconnect();
+    this.notificationHub.stop();
+  }
 
   async ngOnInit() {
     const builder = new HubConnectionBuilder()
       .configureLogging(LogLevel.Information)
-      .withUrl(`https://192.168.1.123:5000/notificationHub`);
+      .withUrl(`https://localhost:44334/notificationHub`);
 
     this.notificationHub = builder.build();
     this.notificationHub.on('RoomsUpdated', async (updated) => {
@@ -67,7 +71,7 @@ export class HomeVideoCallComponent implements OnInit {
   async onLeaveRoom(_: boolean) {
     if (this.activeRoom) {
       this.activeRoom.disconnect();
-      this.activeRoom.removeAllListeners();
+      // this.activeRoom.removeAllListeners();
     }
 
     const videoDevice: any = this.settings.hidePreviewCamera();

@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { any } from 'codelyzer/util/function';
 import { Friend } from 'src/app/shared/models/friend.model';
 import { Profile } from 'src/app/shared/models/profile.model';
@@ -29,7 +30,7 @@ export class TasksComponent {
     useSubmitBehavior: true,
   };
 
-  constructor( private friendService: FriendService, public profileService: ProfileService ) {
+  constructor( private friendService: FriendService, public profileService: ProfileService, public router: Router ) {
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
     : [];
@@ -39,19 +40,17 @@ export class TasksComponent {
   ngOnInit(): void {
     this.friendService.getFriend(this.clientId.idAccount).subscribe((res:any) =>
     {
-      debugger
       this.friends = res;
       this.friends.result.forEach((data: any) =>
         {
-          debugger
           this.listFriends.push(data.friend);
           this.listProfile.push(data.profile);
         });
+
     });
 
     this.profileService.getList().subscribe((data: any) => {
       this.profileSource = data.filter((obj: Profile) => obj.idAccount != this.clientId.idAccount);
-      debugger
     });
   }
 
@@ -62,39 +61,45 @@ export class TasksComponent {
     return true;
   }
 
-  addFriend(e: any)
+  async addFriend(e: any)
   {
     let _friend = new Friend();
-    let profile = this.profileSource.find(data => data.idAccount == e);
+    let profile = this.profileSource.find(data => data.idAccount == e.data.idAccount);
     _friend.idAccount = this.clientId.idAccount;
     _friend.idFriend = profile?.idAccount ?? '';
     _friend.name = profile?.name ?? '';
-    this.friendService.addFriend(_friend).subscribe(data =>
+    await this.friendService.addFriend(_friend).subscribe(data =>
       {
-        debugger;
-        console.log(data);
-        this.profileService.getList().subscribe((_data: any) => {
-          this.profileSource = [];
-          this.profileSource = _data.filter((obj: Profile) => obj.idAccount != this.clientId.idAccount);
-          debugger
-        });
+        this.reloadDataSource();
+      },(error: any) => {
+        this.reloadDataSource();
       });
   }
 
-  deleteFriend(e: any)
+  reloadDataSource()
   {
-    this.profileSource = [];
-    debugger;
-    this.friendService.deleteFriend(this.clientId.idAccount,e).subscribe(data =>
-      {
-        console.log(data);
-        debugger;
-        this.profileSource = [];
-        this.profileService.getList().subscribe((data: any) => {
-          this.profileSource = [];
-          this.profileSource = data.filter((obj: Profile) => obj.idAccount != this.clientId.idAccount);
-          debugger
+    this.friendService.getFriend(this.clientId.idAccount).subscribe((res:any) =>
+    {
+      this.friends = res;
+      this.friends.result.forEach((data: any) =>
+        {
+          this.listFriends.push(data.friend);
+          this.listProfile.push(data.profile);
         });
+    });
+
+    this.profileService.getList().subscribe((data: any) => {
+      this.profileSource = data.filter((obj: Profile) => obj.idAccount != this.clientId.idAccount);
+    });
+  }
+
+  async deleteFriend(e: any)
+  {
+    await this.friendService.deleteFriend(this.clientId.idAccount,e.data.idAccount).subscribe(data =>
+      {
+        window.location.reload();
+      },(error: any) => {
+        window.location.reload();
       });
   }
 

@@ -58,9 +58,9 @@ namespace Server.Controllers
                 profile.id = Guid.NewGuid().ToString();
                 _context.Add(profile);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Created profile success" });
             }
-            return Ok(profile);
+            return Ok(new { Result = "Created profile fail" });
         }
 
         // POST: Profiles/Edit/5
@@ -92,9 +92,9 @@ namespace Server.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok(new { Result = "Update profile success" });
             }
-            return Ok(profile);
+            return Ok(new { Result = "Update profile fail" });
         }
 
         // POST: Profiles/Delete/5
@@ -104,7 +104,7 @@ namespace Server.Controllers
             var profile = await _context.Profiles.FindAsync(idAccount);
             _context.Profiles.Remove(profile);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(new { Result = "Delete profile success" });
         }
         [HttpGet("Exits/{idAccount}")]
         private bool ProfileExists(string idAccount)

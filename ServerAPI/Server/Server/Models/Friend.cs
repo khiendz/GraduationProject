@@ -15,5 +15,6 @@ namespace Server.Models
         public string name { get; set; }
         public string idAccount { get; set; }
         public string idFriend { get; set; }
+        public string accept { get; set; }
     }
 }
