@@ -5,7 +5,7 @@
   height="725px"
   [(value)]="valueContent"
   *ngIf="stateEditNewsFeed"
-  [ngStyle]="{ 'background-color': 'white' }"
+  [ngStyle]="{ 'background-color': '#00000008' }"
 >
   <dxo-toolbar [multiline]="isMultiline">
     <dxi-item name="undo"></dxi-item>
@@ -71,7 +71,10 @@
   <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
 </dx-html-editor>
 
-<div *ngFor="let newsFeed of listNewsFeed; let i = index">
-  <div [innerHTML]="newsFeed.content"></div>
-  <hr />
+<div *ngFor="let newsFeed of listNewsFeed; let i = index" class="card-custom">
+  <div class="content">
+    <div>Ngày đăng: {{newsFeed.datetimePost}}</div>
+    <div [innerHTML]="newsFeed.content"></div>
+    <hr />
+  </div>
 </div>

@@ -32,7 +32,7 @@
   <div *dxTemplate="let data of 'cellTemplate'">
     <img [src]="data.value" />
   </div>
-  <dxi-column dataField="name" [width]="90" [hidingPriority]="2"> </dxi-column>
+  <dxi-column dataField="name" [width]="240" [hidingPriority]="2"> </dxi-column>
   <dxi-column dataField="date" [width]="120" [hidingPriority]="2"  cellTemplate="cellTemplateDate"> </dxi-column>
   <div *dxTemplate="let data of 'cellTemplateDate'">
     {{data.data.date | date: 'dd/MM/yyyy'}}

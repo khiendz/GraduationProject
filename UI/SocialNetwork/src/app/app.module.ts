@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor, JwtInterceptor } from 'src/_helpers';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFileUploaderModule, DxFormModule, DxHtmlEditorModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule } from 'devextreme-angular';
+import { DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxFileUploaderModule, DxFormModule, DxHtmlEditorModule, DxListModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule } from 'devextreme-angular';
 import { HomeComponent } from './pages/home/home.component';
 import { ChatsComponent } from './shared/components/chat/chat.component';
 import { SignUpComponent } from './shared/components/sign-up/sign-up.component';
@@ -26,11 +26,11 @@ import { RoomsComponent } from './pages/rooms/rooms.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { DeviceSelectComponent } from './pages/settings/device-select/device-select.component';
 import { FriendsComponent } from './pages/friends/friends.component';
+import { ListFriendComponent } from './shared/components/list-friend/list-friend.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatComponent,
     HomeComponent,
     SignUpComponent,
     ProfileComponent,
@@ -67,7 +67,8 @@ import { FriendsComponent } from './pages/friends/friends.component';
     DxFormModule,
     DxFileUploaderModule,
     DxSelectBoxModule,
-    DxDataGridModule
+    DxDataGridModule,
+    DxListModule,
   ],
   providers: [
     AuthService,

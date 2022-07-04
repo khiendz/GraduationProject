@@ -31,7 +31,14 @@ export class HomeComponent implements OnInit{
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
     : [];
-  this.uniqueID = this.clientId.user;
+    debugger
+    this.uniqueID = this.clientId.user;
+    // let imgList: HTMLCollection = document.getElementsByTagName('img');
+    // for(let i=0; i < imgList.length; i++)
+    // {
+    //     imgList[0].setAttribute('style','width: 500px; height: 250px');
+    // }
+
   }
 
   async GetALL()

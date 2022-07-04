@@ -45,6 +45,7 @@ export class AuthService {
           email: this.clientId.email,
           avatarUrl: this.clientId.avatar
         };
+        debugger
         this._user = { ..._defaultUser, email };
         this._user.email = _defaultUser.email;
         this._user.avatarUrl = _defaultUser.avatarUrl;

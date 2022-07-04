@@ -17,13 +17,20 @@
       *ngIf="title"
       [text]="title">
     </dxi-item>
+    <dxi-item style="display: flex;" >
+      <dx-text-box width="200%" height="80%"></dx-text-box>
+      <dx-button type="input" icon="search"></dx-button>
+      <dx-button icon="home">
+      </dx-button>
+      <dx-button icon="email">
+      </dx-button>
+    </dxi-item>
     <dxi-item
       location="after"
       locateInMenu="auto"
       menuItemTemplate="menuItem">
       <div *dxTemplate="let data of 'item'">
-        <dx-button icon="email">
-
+        <dx-button icon="globe">
         </dx-button>
         <dx-button
           class="user-button authorization"
