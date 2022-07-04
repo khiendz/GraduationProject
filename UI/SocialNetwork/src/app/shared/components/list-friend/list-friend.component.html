@@ -1,0 +1,16 @@
+<div class="list-container">
+  <dx-list
+    [dataSource]="profileSource"
+    height="100%"
+    [searchEnabled]="true"
+    searchExpr="name"
+    searchMode="contains"
+  >
+    <div *dxTemplate="let item of 'item'">
+      <div class="product">
+      <img src="{{ item.avatar }}" />
+        <div class="price">{{ item.name }}</div>
+      </div>
+    </div>
+  </dx-list>
+</div>

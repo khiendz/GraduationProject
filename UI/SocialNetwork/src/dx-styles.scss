@@ -9,7 +9,12 @@ html, body {
 }
 
 .content {
+
+  background-color: #515159;
+  margin-top: 10px;
   line-height: 1.5;
+  animation: zoom 3s ease;
+  border-radius: 10px;
 
   h2 {
     font-size: 30px;
@@ -59,5 +64,7 @@ html, body {
     min-height: 100%;
   }
 }
+
+
 
 $side-panel-min-width: 60px;

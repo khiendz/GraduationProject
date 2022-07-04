@@ -14,7 +14,7 @@ export class ProfileComponent {
 
   buttonOptions: any = {
     text: 'Register',
-    type: 'success',
+    type: 'default',
     useSubmitBehavior: true,
   };
 

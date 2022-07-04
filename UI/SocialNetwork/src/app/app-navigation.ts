@@ -10,19 +10,23 @@ export const navigation = [
     items: [
       {
         text: 'Profile',
-        path: '/profile'
+        path: '/profile',
+        icon: 'user'
       },
       {
         text: 'Friend',
-        path: '/tasks'
+        path: '/tasks',
+        icon: 'group'
       },
       {
         text: 'Chats',
-        path: '/chats'
+        path: '/chats',
+        icon: 'comment'
       },
       {
-        text: 'VideoCall',
-        path: '/call'
+        text: 'Group Call',
+        path: '/call',
+        icon: 'tel'
       }
     ]
   }

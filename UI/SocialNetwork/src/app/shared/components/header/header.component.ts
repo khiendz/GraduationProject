@@ -7,6 +7,11 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
 import { Router } from '@angular/router';
+import { FriendService } from '../../services/friend.service';
+import { Friend } from '../../models/friend.model';
+import { Profile } from '../../models/profile.model';
+import { ProfileService } from '../../services/profile.service';
+import { DxFilterBuilderModule, DxListModule, DxTextBoxModule } from 'devextreme-angular';
 @Component({
   selector: 'app-header',
   templateUrl: 'header.component.html',
@@ -23,8 +28,13 @@ export class HeaderComponent implements OnInit {
   @Input()
   title!: string;
 
-  user: IUser | null = { email: '' };
+  uniqueID: string = '';
+  clientId: any;
 
+  user: IUser | null = { email: '' };
+  stateSearch: boolean = false;
+  friend: Friend[] = [];
+  profile: Profile[] = [];
   userMenuItems = [{
     text: 'Profile',
     icon: 'user',
@@ -40,22 +50,38 @@ export class HeaderComponent implements OnInit {
     }
   }];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router,public friendService: FriendService, public profileService: ProfileService) {
+
+    this.clientId = localStorage.getItem('currentUser')
+    ? JSON.parse(localStorage.getItem('currentUser') || '')
+    : [];
+    this.uniqueID = this.clientId.user;
+   }
 
   ngOnInit() {
-    debugger
     this.authService.getUser().then((e) => {
-      debugger
       this.user = e.data
+      debugger
       document.getElementById('user-image')?.setAttribute('style',`background: url("${e.data?.avatarUrl}") no-repeat #fff !important; background-size: contain !important;`);
 
     });
+
+    this.profileService.getList().subscribe(
+      (data: any) =>
+      {
+        this.profile = data;
+      }
+    )
   }
 
   toggleMenu = () => {
     this.menuToggle.emit();
   }
 
+  focusSearch()
+  {
+    this.stateSearch = !this.stateSearch;
+  }
 }
 
 @NgModule({
@@ -63,7 +89,10 @@ export class HeaderComponent implements OnInit {
     CommonModule,
     DxButtonModule,
     UserPanelModule,
-    DxToolbarModule
+    DxToolbarModule,
+    DxListModule,
+    DxFilterBuilderModule,
+    DxTextBoxModule
   ],
   declarations: [ HeaderComponent ],
   exports: [ HeaderComponent ]
