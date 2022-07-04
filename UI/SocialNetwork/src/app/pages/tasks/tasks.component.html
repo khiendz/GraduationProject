@@ -1,8 +1,9 @@
+<div class="grid-friend">
 <h2 class="content-block">Search and add friend</h2>
-
 <dx-data-grid
   #grid
   class="dx-card wide-card"
+  id="gridContainer"
   [dataSource]="profileSource"
   [showBorders]="false"
   [focusedRowIndex]="0"
@@ -51,3 +52,4 @@
    <dx-button *ngIf="!checkAdded(data)" icon="remove" (onClick)="deleteFriend(data)" type="default"></dx-button>
   </div>
 </dx-data-grid>
+</div>

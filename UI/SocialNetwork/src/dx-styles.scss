@@ -9,7 +9,12 @@ html, body {
 }
 
 .content {
+
+  background-color: white;
+  margin-top: 10px;
   line-height: 1.5;
+  animation: zoom 3s ease;
+  border-radius: 10px;
 
   h2 {
     font-size: 30px;

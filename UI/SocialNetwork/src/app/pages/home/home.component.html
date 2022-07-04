@@ -1,10 +1,6 @@
-<br>
-<h3 class=" text-center chat_header">New feeds</h3>
-<br>
-<dx-button (onClick)="editNewsFeed($event)" type="default" *ngIf="!stateEditNewsFeed"
-  >Hey {{uniqueID}},  what are you thinking?</dx-button
+<button (click)="editNewsFeed($event)" type="default" *ngIf="!stateEditNewsFeed" class="button-53 submit"
+  >Hey {{uniqueID}},  what are you thinking?</button
 >
-<hr />
 <dx-html-editor
   height="725px"
   [(value)]="valueContent"

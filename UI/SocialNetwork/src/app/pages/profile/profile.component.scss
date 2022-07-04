@@ -16,3 +16,27 @@
     margin: 0 auto;
   }
 }
+
+.form-parent {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-name {
+  flex: 1;
+}
+
+.title-avatar {
+  flex: 1;
+  width: 50%;
+}
+
+#register
+{
+  margin: 0 auto;
+}

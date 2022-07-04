@@ -1,8 +1,10 @@
+<div class="form-parent">
 <form action="your-action" (submit)="submitForm()">
 <dx-form id="form" [formData]="profile">
-  <dxi-item itemType="group" cssClass="first-group" [colCount]="4">
+  <dxi-item itemType="group" cssClass="first-group" [colCount]="1">
     <br>
-    <dxi-item dataField="avatar">
+    <div class="title">
+    <dxi-item dataField="avatar" class="title-avatar">
       <div id="form-avatar"></div>
       <div id="fileuploader-container">
         <dx-file-uploader
@@ -15,8 +17,10 @@
         </dx-file-uploader>
       </div>
     </dxi-item>
+    <div class="title-name"><h2><strong>Profile: {{profile.name}}</strong></h2></div>
+  </div>
   </dxi-item>
-  <dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+  <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
     <dxi-item itemType="group">
       <dxi-item dataField="name"></dxi-item>
       <dxi-item dataField="date"   editorType="dxDateBox"
@@ -26,11 +30,12 @@
       <dxi-item dataField="location"></dxi-item>
     </dxi-item>
   </dxi-item>
-  <dxi-item
-  itemType="button"
-  horizontalAlignment="left"
-  [buttonOptions]="buttonOptions"
->
+    <dxi-item
+    itemType="button"
+    horizontalAlignment="center"
+    [buttonOptions]="buttonOptions"
+  >
 </dxi-item>
 </dx-form>
 </form>
+</div>
