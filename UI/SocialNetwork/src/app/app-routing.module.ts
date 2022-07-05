@@ -60,7 +60,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'call',
+    redirectTo: 'home',
   }
 ];
 

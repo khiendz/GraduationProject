@@ -34,7 +34,7 @@ export class ListFriendComponent implements OnInit {
   constructor(
     private chatService: ChatServiceService,
     private friendService: FriendService,
-    public profileService: ProfileService,
+    public profileService: ProfileService
   ) {
     this.clientId = localStorage.getItem('currentUser')
       ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -57,11 +57,12 @@ export class ListFriendComponent implements OnInit {
       );
     });
 
-
   }
 
   selectFriend(e: any)
   {
+    debugger
+    console.log(e);
     if(!this.listIdSource.find((data :any) => data == e.idAccount))
     {
       this.listIdSource.push(e.idAccount);

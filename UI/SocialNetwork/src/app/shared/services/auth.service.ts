@@ -33,6 +33,7 @@ export class AuthService {
   async logIn(email: string, password: string) {
 
     try {
+      debugger
       // Send request
       this.clientId = localStorage.getItem('currentUser')
       ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -44,6 +45,7 @@ export class AuthService {
           email: this.clientId.email,
           avatarUrl: this.clientId.avatar
         };
+        debugger
         this._user = { ..._defaultUser, email };
         this._user.email = _defaultUser.email;
         this._user.avatarUrl = _defaultUser.avatarUrl;
@@ -143,6 +145,7 @@ export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
+    debugger
     const isLoggedIn = this.authService.loggedIn;
     const isAuthForm = [
       'login-form',

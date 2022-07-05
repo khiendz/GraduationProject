@@ -1,6 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { any } from 'codelyzer/util/function';
 import { Friend } from 'src/app/shared/models/friend.model';
+import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
 import { FriendService } from 'src/app/shared/services/friend.service';
 import { Message } from '../../shared/models/message.model';
 

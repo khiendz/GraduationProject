@@ -24,6 +24,7 @@ export class CreateAccountFormComponent {
 
   async onSubmit(e: Event) {
     e.preventDefault();
+    debugger
     const { email, name, password } = this.formData;
     this.loading = true;
 

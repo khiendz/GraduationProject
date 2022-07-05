@@ -12,7 +12,6 @@ import { Friend } from '../../models/friend.model';
 import { Profile } from '../../models/profile.model';
 import { ProfileService } from '../../services/profile.service';
 import { DxFilterBuilderModule, DxListModule, DxTextBoxModule } from 'devextreme-angular';
-import { ChatServiceService } from '../../services/chat-service.service';
 @Component({
   selector: 'app-header',
   templateUrl: 'header.component.html',
@@ -51,7 +50,7 @@ export class HeaderComponent implements OnInit {
     }
   }];
 
-  constructor(private authService: AuthService, private router: Router,public friendService: FriendService, public profileService: ProfileService, chatService: ChatServiceService) {
+  constructor(private authService: AuthService, private router: Router,public friendService: FriendService, public profileService: ProfileService) {
 
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -62,7 +61,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authService.getUser().then((e) => {
       this.user = e.data
-      document.getElementById('user-image')?.setAttribute('style',`background: url("${e.data?.avatarUrl}") no-repeat #fff !important; background-size: cover !important;`);
+      debugger
+      document.getElementById('user-image')?.setAttribute('style',`background: url("${e.data?.avatarUrl}") no-repeat #fff !important; background-size: contain !important;`);
 
     });
 
