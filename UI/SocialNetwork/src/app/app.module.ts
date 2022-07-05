@@ -41,7 +41,7 @@ import { ListFriendComponent } from './shared/components/list-friend/list-friend
     SettingsComponent,
     DeviceSelectComponent,
     FriendsComponent,
-    TasksComponent
+    TasksComponent,
   ],
   imports: [
     BrowserModule,

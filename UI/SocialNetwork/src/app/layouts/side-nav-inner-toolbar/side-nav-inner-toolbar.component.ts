@@ -12,7 +12,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { ChatsModule } from 'src/app/shared/components/chat/chat.component';
 import { ChatComponent } from 'src/app/pages/chat/chat.component';
 import { DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
-import { ListFriendModule } from 'src/app/shared/components/list-friend/list-friend.component';
+import { ListFriendComponent, ListFriendModule } from 'src/app/shared/components/list-friend/list-friend.component';
 
 @Component({
   selector: 'app-side-nav-inner-toolbar',
@@ -25,10 +25,9 @@ export class SideNavInnerToolbarComponent implements OnInit {
 
   menuOpened!: boolean;
   temporaryMenuOpened = false;
-
   @Input()
   title!: string;
-
+  listId: any = [];
   menuMode = 'shrink';
   menuRevealMode = 'expand';
   minMenuSize = 0;
@@ -100,6 +99,11 @@ export class SideNavInnerToolbarComponent implements OnInit {
       this.temporaryMenuOpened = true;
       this.menuOpened = true;
     }
+  }
+
+  addItemToListId(e:any)
+  {
+    this.listId = e;
   }
 }
 

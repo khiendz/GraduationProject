@@ -1,4 +1,4 @@
-import { Component, NgModule, NgZone, OnInit } from '@angular/core';
+import { Component, Input, NgModule, NgZone, OnInit } from '@angular/core';
 import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
 import { Message } from '../../models/message.model';
 
@@ -8,12 +8,13 @@ import { Message } from '../../models/message.model';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatsComponent implements OnInit {
-
+  @Input('id') id: string = '';
   title = 'ClientApp';
   txtMessage: string = '';
   uniqueID: string = new Date().getTime().toString();
   messages = new Array<Message>();
   message = new Message();
+  @Input('listId') listId:string[] = [];
   constructor(
     private chatService: ChatServiceService,
     private _ngZone: NgZone
@@ -24,6 +25,7 @@ export class ChatsComponent implements OnInit {
     this.txtMessage = event.target!.value;
  }
   ngOnInit(): void {
+
   }
   sendMessage(): void {
     debugger

@@ -1,8 +1,10 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
 import { any } from 'codelyzer/util/function';
 import { Friend } from 'src/app/shared/models/friend.model';
+import { Profile } from 'src/app/shared/models/profile.model';
 import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
 import { FriendService } from 'src/app/shared/services/friend.service';
+import { ProfileService } from 'src/app/shared/services/profile.service';
 import { Message } from '../../shared/models/message.model';
 
 @Component({
@@ -13,6 +15,9 @@ import { Message } from '../../shared/models/message.model';
 export class ChatComponent implements OnInit {
   title = 'ClientApp';
   txtMessage: string = '';
+  @Input('id') id:string = '';
+  @Input('listIds') listIds:string[] = [];
+  @Output() listId = new EventEmitter<any>();
   uniqueID: string = '';
   messages = new Array<Message>();
   message = new Message();
@@ -22,40 +27,57 @@ export class ChatComponent implements OnInit {
   clientId: any;
   valueSelectFriend: string;
   stateChat: boolean = false;
+  profile: Profile = new Profile();
   constructor(
     private chatService: ChatServiceService,
     private friendService: FriendService,
+    private profileService: ProfileService,
     private _ngZone: NgZone
   ) {
     this.clientId = localStorage.getItem('currentUser')
       ? JSON.parse(localStorage.getItem('currentUser') || '')
       : [];
-    this.uniqueID = this.clientId.user;
+    this.uniqueID = this.clientId.idAccount;
     this.subscribeToEvents();
   }
   handleInput(event: any) {
     this.txtMessage = event.target!.value;
   }
   ngOnInit(): void {
-    this.friendService.getFriend(this.clientId.idAccount).subscribe((res:any) =>
-    {
+    // this.friendService.getFriend(this.clientId.idAccount).subscribe((res:any) =>
+    // {
+    //   debugger
+    //   this.friends = res;
+    //   this.friends.result.forEach((data: any) =>
+    //     {
+    //       if(data.friend.idAccount == this.clientId.idAccount)
+    //       this.listFriends.push(data.friend);
+    //       this.listProfile.push(data.profile);
+    //     });
+    // });
+    this.profileService.detailsProfile(this.id).subscribe((data: any) => {
       debugger
-      this.friends = res;
-      this.friends.result.forEach((data: any) =>
-        {
-          if(data.friend.idAccount == this.clientId.idAccount)
-          this.listFriends.push(data.friend);
-        });
+      this.profile = data;
     });
+    this.getSourceMessage();
+  }
+
+  close()
+  {
+    this.chatDisplay = !this.chatDisplay;
+    let index = this.listIds.findIndex(data => data == this.id);
+    this.listIds.splice(index,1);
+    this.listId.emit(this.listIds);
+    debugger
   }
 
   getSourceMessage()
   {
-    this.chatService.getSourceMessage(this.uniqueID,this.valueSelectFriend).subscribe((data :any) =>
+    this.chatService.getSourceMessage(this.uniqueID,this.id).subscribe((data :any) =>
       {
         data.forEach((obj:Message) => {
           debugger
-          if(obj.clientuniqueid == this.clientId.user)
+          if(obj.clientuniqueid == this.uniqueID)
           {
             this.messages.push(obj);
           }else
@@ -75,7 +97,7 @@ export class ChatComponent implements OnInit {
       this.message.type = 'sent';
       this.message.message = this.txtMessage;
       this.message.date = new Date();
-      this.message.clientTo = this.valueSelectFriend;
+      this.message.clientTo = this.id;
       this.messages.push(this.message);
       this.chatService.sendMessage(this.message);
       this.txtMessage = '';
@@ -95,6 +117,8 @@ export class ChatComponent implements OnInit {
         debugger;
         if (message.clientTo === this.uniqueID) {
           debugger;
+          const audio = new Audio('https://your-file.mp3');
+          audio.play();
           message.type = 'received';
           this.messages.push(message);
         }

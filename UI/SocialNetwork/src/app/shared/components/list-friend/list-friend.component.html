@@ -7,10 +7,13 @@
     searchMode="contains"
   >
     <div *dxTemplate="let item of 'item'">
-      <div class="product">
+      <div class="product" (click)="selectFriend(item)">
       <img src="{{ item.avatar }}" />
         <div class="price">{{ item.name }}</div>
       </div>
     </div>
   </dx-list>
 </div>
+<!-- <div *ngFor="let item of listId">
+  <app-chat [id]="item"></app-chat>
+</div> -->
