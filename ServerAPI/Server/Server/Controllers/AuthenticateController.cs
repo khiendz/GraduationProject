@@ -80,12 +80,20 @@ namespace Server.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExists = await userManager.FindByEmailAsync(model.Email);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-            userExists = await userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            try 
+            {
+                var userExists = await userManager.FindByEmailAsync(model.Email);
+                if (userExists != null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+                userExists = await userManager.FindByNameAsync(model.Username);
+                if (userExists != null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+            }
+            catch(Exception e)
+            {
+                
+            }
+            
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,

@@ -8,6 +8,29 @@ using System.Threading.Tasks;
 
 namespace Server.Hubs
 {
+    public static class UserHandler
+    {
+        public static List<Connect> ConnectedIds = new List<Connect>();
+    }
+
+    public class Connect
+    {
+
+        public Connect()
+        {
+
+        }
+
+        public Connect(string idAccount, string userName)
+        {
+            this.idAccount = idAccount;
+            this.userName = userName;
+        }
+
+        public string idAccount { get; set; }
+        public string userName { get; set; }
+    }
+
     public class MessageHub : Hub
     {
         private readonly ApplicationDbContext _context;
@@ -23,9 +46,17 @@ namespace Server.Hubs
             await Clients.All.SendAsync("MessageReceived", msg);
         }
 
-        public async Task test()
+        public async Task Connected(Connect connect)
         {
-            Console.WriteLine("ádasdsad");
+            UserHandler.ConnectedIds.Add(connect);
+            await Clients.All.SendAsync("ConnectStart", UserHandler.ConnectedIds);
         }
+
+        public async Task Disconnected(Connect connect)
+        {
+            UserHandler.ConnectedIds.Remove(connect);
+            await Clients.All.SendAsync("Disconnect", UserHandler.ConnectedIds);
+        }
+
     }
 }

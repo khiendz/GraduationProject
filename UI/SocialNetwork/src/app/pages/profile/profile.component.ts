@@ -24,24 +24,20 @@ export class ProfileComponent {
     : [];
     profileService.detailsProfile(this.clientId.idAccount).subscribe((res: any) =>
     {
-      debugger
       this.profile = res;
       document.getElementById("form-avatar")?.setAttribute('style', `background-image: url('${this.profile.avatar}')`);
     },error =>
     {
-      debugger
     });
   }
 
 
   updateClick(e:any) {
-    debugger
     this.profile.avatar = e.value[0].name;
   }
 
   submitForm()
   {
-    debugger
     this.profileService.updateProfile(this.profile).subscribe();
   }
 }
