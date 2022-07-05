@@ -34,7 +34,7 @@ namespace Server.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await userManager.FindByNameAsync(model.Username);
+            var user = await userManager.FindByEmailAsync(model.Email);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await userManager.GetRolesAsync(user);
@@ -60,17 +60,17 @@ namespace Server.Controllers
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
 
-                var idAccount = context?.Accounts?.FirstOrDefaultAsync(data => data.userName == model.Username)?.Result?.idAccount;
-                var avatar = context?.Profiles?.FirstOrDefaultAsync(data => data.name == model.Username)?.Result?.avatar;
+                var idAccount = context?.Accounts?.FirstOrDefaultAsync(data => data.userName == model.Email)?.Result;
+                var avatar = context?.Profiles?.FirstOrDefaultAsync(data => data.idAccount == idAccount.idAccount)?.Result;
 
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo, 
-                    user = model.Username,
-                    idAccount = idAccount,
+                    user = avatar.name,
+                    idAccount = idAccount.idAccount,
                     email = user.Email,
-                    avatar = avatar,
+                    avatar = avatar.avatar,
                 });
             }
             return Unauthorized();
@@ -80,10 +80,12 @@ namespace Server.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExists = await userManager.FindByNameAsync(model.Username);
+            var userExists = await userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-
+            userExists = await userManager.FindByNameAsync(model.Username);
+            if (userExists != null)
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,
@@ -96,9 +98,9 @@ namespace Server.Controllers
 
             try
             {
-                var account = new Account(Guid.NewGuid(), model.Username, model.Password);
+                var account = new Account(Guid.NewGuid(), model.Email, model.Password);
                 _ = await this.context.Accounts.AddAsync(account);
-                _ = await this.context.Profiles.AddAsync(new Profile(Guid.NewGuid().ToString(),account.idAccount.ToString()));
+                _ = await this.context.Profiles.AddAsync(new Profile(Guid.NewGuid().ToString(),account.idAccount.ToString(),model.Username));
                 _ = await this.context.SaveChangesAsync();
             }
             catch (Exception e)

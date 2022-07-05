@@ -14,10 +14,11 @@ namespace Server.Models
         {
         }
 
-        public Profile(string id, string idAccount)
+        public Profile(string id, string idAccount, string name)
         {
             this.id = id;
             this.idAccount = idAccount;
+            this.name = name;
         }
 
         public Profile(string id, string avartar, string name, string date, string sex, string age, string location, string idAccount)

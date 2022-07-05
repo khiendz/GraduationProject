@@ -71,6 +71,7 @@ namespace Server.Controllers
             if (ModelState.IsValid)
             {
                 friend.id = Guid.NewGuid().ToString();
+                friend.accept = null;
                 _context.Add(friend);
                 await _context.SaveChangesAsync();
                 return Ok(new { Result = "Added friend success"});

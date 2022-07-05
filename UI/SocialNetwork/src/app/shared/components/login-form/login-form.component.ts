@@ -32,18 +32,18 @@ export class LoginFormComponent {
   async onSubmit(e: Event) {
 
     e.preventDefault();
-    const { username, password } = this.formData;
+    const { email, password } = this.formData;
     this.loading = true;
 
     this.loading = true;
     var check;
     try
     {
-    this.authentication.login(username, password).subscribe(
+    this.authentication.login(email, password).subscribe(
       (res :User) => {
         if(res != null)
         {
-          this.authService.logIn(username, password);
+          this.authService.logIn(email, password);
           check = true;
         }
       },
