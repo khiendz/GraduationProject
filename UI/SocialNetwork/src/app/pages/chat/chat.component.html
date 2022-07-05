@@ -17,42 +17,18 @@
           >
           </dx-select-box> -->
           <div class="chatbox-avatar">
-            <a target="_blank" href="https://www.facebook.com/boxbox2000/"
-              ><img [src]="avatar"
-            /></a>
+            <a target="_blank" href="https://www.facebook.com/boxbox2000/"><img [src]="profile.avatar" /></a>
           </div>
-          <div
-            style="
-              color: black;
-              margin-left: 40px;
-              text-align: center;
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-                Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
-                sans-serif;
-              font-weight: 800;
-            "
-          >
-            {{ profile.name }}
-          </div>
+          <div style="color: black; margin-left: 40px;   text-align: center;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-weight: 800;">{{profile.name}}</div>
           <div class="chat-icon">
             <dx-button class="icon" icon="tel" type="success"> </dx-button>
             <dx-button class="icon" icon="video" type="default"> </dx-button>
-            <dx-button
-              class="icon"
-              icon="minus"
-              type="normal"
-              (onClick)="minimum()"
-            >
-            </dx-button>
-            <dx-button
-              class="icon"
-              icon="close"
-              type="danger"
-              (onClick)="close()"
-            ></dx-button>
+            <dx-button class="icon" icon="minus" type="normal"> </dx-button>
+            <dx-button class="icon" icon="close" type="danger" (onClick)="close()"></dx-button>
           </div>
         </div>
-        <hr />
+        <hr>
         <div class="msg_history">
           <div *ngFor="let msg of messages">
             <div class="incoming_msg" *ngIf="msg.type == 'received'">
@@ -88,24 +64,11 @@
               (keydown.enter)="sendMessage()"
               placeholder="Type a message"
             />
-            <dx-button
-              icon="arrowright"
-              class="msg_send_btn"
-              type="default"
-              (onClick)="sendMessage()"
-            >
+            <dx-button icon="arrowright" class="msg_send_btn" type="default" (onClick)="sendMessage()">
             </dx-button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="container" *ngIf="chatDisplay" (mouseenter)="focus()" (mouseleave)="focus()">
-  <div class="chatbox-avatar-minimum">
-    <dx-button icon="close" class="close-minimum"  *ngIf="enableClose" (onClick)="close()"></dx-button>
-    <a target="_blank" (click)="minimum()"
-      ><img [src]="profile.avatar"
-    /></a>
   </div>
 </div>

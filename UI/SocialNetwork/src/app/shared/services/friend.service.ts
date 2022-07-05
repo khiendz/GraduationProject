@@ -41,6 +41,7 @@ export class FriendService {
   }
   public deleteFriend(idAccount:string, idFriend: string)
   {
+    debugger
     const requestUrl = String.Format(apiUrl.deleteFriend,idAccount,idFriend);
     return this.httpClient.get(requestUrl);
   }
