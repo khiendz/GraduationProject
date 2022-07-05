@@ -31,7 +31,6 @@ export class HomeComponent implements OnInit{
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
     : [];
-    debugger
     this.uniqueID = this.clientId.user;
     // let imgList: HTMLCollection = document.getElementsByTagName('img');
     // for(let i=0; i < imgList.length; i++)
@@ -43,7 +42,6 @@ export class HomeComponent implements OnInit{
 
   async GetALL()
   {
-    debugger
     this.listNewsFeed = await lastValueFrom(
       this.service.GetAll()
     );
