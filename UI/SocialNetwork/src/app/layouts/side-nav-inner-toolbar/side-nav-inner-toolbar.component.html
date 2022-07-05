@@ -54,7 +54,7 @@
     <app-list-friend class="container-list" (listId)="addItemToListId($event)"></app-list-friend>
   </div>
   <div class="content-chat">
-    <div *ngFor="let item of listId">
+    <div *ngFor="let item of listId" class="chat-box">
       <app-chat [id]="item" [listIds]="listId" (listId)="addItemToListId($event)"></app-chat>
     </div>
   </div>

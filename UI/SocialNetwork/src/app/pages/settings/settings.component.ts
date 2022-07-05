@@ -65,6 +65,7 @@ export class SettingsComponent implements OnInit, OnDestroy  {
   }
 
   async showPreviewCamera() {
+    debugger
       this.isPreviewing = true;
 
       if (!this.camera.videoTrack || this.videoDeviceId !== this.video?.selectedId) {

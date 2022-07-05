@@ -105,10 +105,8 @@ export class TasksComponent {
 
   selectProfile()
   {
-    debugger
     this.profile = new Profile();
     this.profileSource.forEach((data: Profile) => {
-      debugger
       if(data.idAccount == this.idAccount)
       {
         this.profile = data;

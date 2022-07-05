@@ -13,5 +13,7 @@ namespace Server.Models
         [Key]
         public string id { get; set; }
         public string message { get; set; }
+        public string idAccount { get; set; }
+        public string idfromTo { get; set; }
     }
 }

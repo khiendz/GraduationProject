@@ -161,8 +161,8 @@ namespace Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<MessageHub>("/MessageHub");
-                endpoints.MapHub<NotificationHub>("/NotificationHub");
+                endpoints.MapHub<MessageHub>("api/MessageHub");
+                endpoints.MapHub<NotificationHub>("api/NotificationHub");
             });
             
         }

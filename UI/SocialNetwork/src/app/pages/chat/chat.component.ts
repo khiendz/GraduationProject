@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, NgZone, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { any } from 'codelyzer/util/function';
+import { Connect } from 'src/app/shared/models/connect';
 import { Friend } from 'src/app/shared/models/friend.model';
 import { Profile } from 'src/app/shared/models/profile.model';
 import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
@@ -12,7 +13,7 @@ import { Message } from '../../shared/models/message.model';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy{
   title = 'ClientApp';
   txtMessage: string = '';
   @Input('id') id:string = '';
@@ -28,6 +29,9 @@ export class ChatComponent implements OnInit {
   valueSelectFriend: string;
   stateChat: boolean = false;
   profile: Profile = new Profile();
+  enableClose: boolean = false;
+  avatar: string = '';
+  connect: Connect = new Connect();
   constructor(
     private chatService: ChatServiceService,
     private friendService: FriendService,
@@ -38,7 +42,13 @@ export class ChatComponent implements OnInit {
       ? JSON.parse(localStorage.getItem('currentUser') || '')
       : [];
     this.uniqueID = this.clientId.idAccount;
+    this.connect.idAccount = this.uniqueID;
+    this.connect.userName = this.clientId.user;
     this.subscribeToEvents();
+  }
+  ngOnDestroy(): void {
+    this.chatService._disconnect(this.connect);
+    this.chatService._hubConnection.stop();
   }
   handleInput(event: any) {
     this.txtMessage = event.target!.value;
@@ -56,10 +66,11 @@ export class ChatComponent implements OnInit {
     //     });
     // });
     this.profileService.detailsProfile(this.id).subscribe((data: any) => {
-      debugger
       this.profile = data;
+      this.avatar = this.profile.avatar;
     });
     this.getSourceMessage();
+    this.chatService.connect(this.connect);
   }
 
   close()
@@ -68,7 +79,16 @@ export class ChatComponent implements OnInit {
     let index = this.listIds.findIndex(data => data == this.id);
     this.listIds.splice(index,1);
     this.listId.emit(this.listIds);
-    debugger
+  }
+
+  minimum()
+  {
+    this.chatDisplay = !this.chatDisplay;
+  }
+
+  focus()
+  {
+    this.enableClose = !this.enableClose;
   }
 
   getSourceMessage()
@@ -76,7 +96,6 @@ export class ChatComponent implements OnInit {
     this.chatService.getSourceMessage(this.uniqueID,this.id).subscribe((data :any) =>
       {
         data.forEach((obj:Message) => {
-          debugger
           if(obj.clientuniqueid == this.uniqueID)
           {
             this.messages.push(obj);
@@ -90,7 +109,6 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage(): void {
-    debugger;
     if (this.txtMessage) {
       this.message = new Message();
       this.message.clientuniqueid = this.uniqueID;
@@ -117,11 +135,23 @@ export class ChatComponent implements OnInit {
         debugger;
         if (message.clientTo === this.uniqueID) {
           debugger;
-          const audio = new Audio('https://your-file.mp3');
-          audio.play();
           message.type = 'received';
           this.messages.push(message);
         }
+      });
+    });
+
+    this.chatService.connectStart.subscribe((connect: any) => {
+      this._ngZone.run(() => {
+        debugger;
+        console.log(connect);
+      });
+    });
+
+    this.chatService.disconnect.subscribe((connect: any) => {
+      this._ngZone.run(() => {
+        debugger;
+        console.log(connect);
       });
     });
   }

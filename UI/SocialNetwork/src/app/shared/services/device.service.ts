@@ -13,14 +13,14 @@ export class DeviceService {
     private deviceBroadcast = new ReplaySubject<Promise<Devices>>();
 
     constructor() {
-        if (navigator && navigator.mediaDevices) {
-            navigator.mediaDevices.ondevicechange = (_: Event) => {
-                this.deviceBroadcast.next(this.getDeviceOptions());
-            }
+      if (navigator && navigator.mediaDevices) {
+        navigator.mediaDevices.ondevicechange = (_: Event) => {
+            this.deviceBroadcast.next(this.getDeviceOptions());
         }
+    }
 
-        this.$devicesUpdated = this.deviceBroadcast.asObservable();
-        this.deviceBroadcast.next(this.getDeviceOptions());
+    this.$devicesUpdated = this.deviceBroadcast.asObservable();
+    this.deviceBroadcast.next(this.getDeviceOptions());
     }
 
     private async isGrantedMediaPermissions() {
