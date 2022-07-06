@@ -10,7 +10,8 @@ const apiUrl = {
   detailsProfile: '/profiles/details/{0}',
   updateProfile : '/profiles/edit/{0}',
   deleteProfile : '/profiles/delete/{0}',
-  exist : 'profiles/exist/{0}'
+  exist : '/profiles/exist/{0}',
+  search : '/profiles/search/{0}',
 };
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,12 @@ export class ProfileService {
   public exist(idAccount:string)
   {
     const requestUrl = String.Format(apiUrl.exist,idAccount);
+    return this.httpClient.get(requestUrl);
+  }
+
+  public search(name:string)
+  {
+    const requestUrl = String.Format(apiUrl.search,name);
     return this.httpClient.get(requestUrl);
   }
 }

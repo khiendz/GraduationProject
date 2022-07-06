@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { any } from 'codelyzer/util/function';
 import { Friend } from 'src/app/shared/models/friend.model';
 import { Profile } from 'src/app/shared/models/profile.model';
@@ -24,17 +24,26 @@ export class TasksComponent {
   profileSource: any[] = [];
   profile: Profile;
   idAccount: string;
+  valueSearch: string;
+  paramSearch: string;
   buttonOptions: any = {
     text: 'Register',
     type: 'success',
     useSubmitBehavior: true,
   };
 
-  constructor( private friendService: FriendService, public profileService: ProfileService, public router: Router ) {
+  constructor( private friendService: FriendService, public profileService: ProfileService, public router: Router, public route: ActivatedRoute ) {
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
     : [];
   this.uniqueID = this.clientId.user;
+  this.route.queryParams.subscribe(params => {
+    this.paramSearch = params['name'];
+  });
+  if(this.paramSearch)
+  {
+    this.valueSearch = this.paramSearch;
+  }
   }
 
   ngOnInit(): void {

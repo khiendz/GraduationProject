@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
 
   uniqueID: string = '';
   clientId: any;
-
+  nameSearch: string = '';
   user: IUser | null = { email: '' };
   stateSearch: boolean = false;
   friend: Friend[] = [];
@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
     text: 'Profile',
     icon: 'user',
     onClick: () => {
-      this.router.navigate(['/profile']);
+      this.router.navigate([`/profile`]);
     }
   },
   {
@@ -81,6 +81,20 @@ export class HeaderComponent implements OnInit {
   focusSearch()
   {
     this.stateSearch = !this.stateSearch;
+  }
+
+  search(e: any)
+  {
+    this.router.navigate(['/tasks'], { queryParams: { name: e}}).then(() => {
+      window.location.reload();
+    });
+  }
+
+  openProfile(e:any)
+  {
+    this.router.navigate(['/profile'], { queryParams: { name: e}}).then(() => {
+      window.location.reload();
+    });
   }
 }
 

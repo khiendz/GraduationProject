@@ -43,6 +43,7 @@ export class LoginFormComponent {
       (res :User) => {
         if(res != null)
         {
+          notify("Loggin success","success",3000)
           this.authService.logIn(email, password);
           check = true;
         }
@@ -51,14 +52,14 @@ export class LoginFormComponent {
         console.log(error);
         this.error = error;
         this.loading = false;
-        notify("Authentication failed")
+        notify("Authentication failed","warrring",3000)
       }
     );}catch(error)
     {
       console.log(error);
       this.error = error;
       this.loading = false;
-      notify("Authentication failed")
+      notify("Authentication failed","warrring",3000)
     }
 
     // debugger

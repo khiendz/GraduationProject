@@ -33,7 +33,7 @@ export class CreateAccountFormComponent {
         const result = data;
         this.loading = false;
         if (result.status === "Success") {
-          notify(result.message,'Success',1500);
+          notify(result.message,'Success',3000);
           this.router.navigate(['/login-form']);
         }
       },error =>
@@ -44,7 +44,7 @@ export class CreateAccountFormComponent {
           this.loading = false;
         }else
         {
-          notify('User has some fields missing','Error',1500);
+          notify('User has some fields missing','Error',3000);
           this.loading = false;
         }
       });

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { String } from 'typescript-string-operations';
 
 const apiUrl = {
-  GetAll: '/newFeeds/get',
+  GetAll: '/newFeeds/get/{0}',
   GetDetailsId: '/newFeeds/details/{0}',
   Create: '/newFeeds/create',
   Edit: '/newFeeds/edit/{0}',
@@ -21,8 +21,10 @@ export class HomeService {
     private httpClient: HttpClient
   ) { }
 
-  public GetAll(){
-    return this.httpClient.get<any>(apiUrl.GetAll);
+  public GetAll(idAccount: string){
+    debugger
+    const requestUrl = String.Format(apiUrl.GetAll,idAccount);
+    return this.httpClient.get<any>(requestUrl);
   }
 
   public GetDetail(id:string){

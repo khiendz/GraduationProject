@@ -111,5 +111,33 @@ namespace Server.Controllers
         {
             return _context.Profiles.Any(e => e.idAccount == idAccount);
         }
+
+        [HttpGet("search/{name}")]
+        public async Task<IActionResult> SearchProfile(string name)
+        {
+            if(name == null)
+            {
+                return Ok(new { Result = "Search Empty"});
+            }
+
+            var result = await _context.Profiles.Where(data => data.name.Contains(name) || data.idAccount.Contains(name) || data.location.Contains(name)).FirstOrDefaultAsync();
+            if(result != null)
+            {
+                return Ok(new { Result = result });
+            }
+            else
+            {
+                var account =  _context.Accounts.Where(data => data.userName.Contains(name)).FirstOrDefault();
+                if(account != null)
+                {
+                    result = _context.Profiles.Where(data => data.idAccount == account.idAccount).FirstOrDefault();
+
+                    return Ok(new { Result = result });
+                }else
+                {
+                    return Ok("There is no friend like Khien" + name);
+                }    
+            }
+        }
     }
 }

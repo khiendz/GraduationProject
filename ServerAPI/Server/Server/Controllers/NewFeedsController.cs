@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Server.Authentication;
+using Server.Entity;
 using Server.Models;
 
 namespace Server.Controllers
@@ -22,10 +23,31 @@ namespace Server.Controllers
         }
 
         // GET: NewFeeds
-        [HttpGet("Get")]
-        public async Task<IActionResult> Index()
+        [HttpGet("Get/{idAccount}")]
+        public async Task<IActionResult> Index(string idAccount)
         {
-            return Ok(await _context.NewFeeds.OrderByDescending(x => x.datetimePost).ToListAsync());
+            var listFriend = _context.Friends.Where(data => data.idAccount == idAccount).ToList();
+          
+            var listNewFeeds = await _context.NewFeeds.OrderByDescending(x => x.datetimePost).Where(data => ((data.idAccount == idAccount) )).ToListAsync();
+            listFriend.ForEach( data =>
+            {
+                var listNewFeedFriend = _context.NewFeeds.OrderByDescending(x => x.datetimePost).Where(content => ((content.idAccount == data.idFriend))).ToList();
+                listNewFeeds.AddRange(listNewFeedFriend);
+            });
+            var result = new List<NewFeedsResponse>();
+            listNewFeeds.ForEach(data =>
+            {
+                var objProfile = _context.Profiles.FirstOrDefault(profile => profile.idAccount == data.idAccount);
+                var objResult = new NewFeedsResponse();
+                objResult.newFeeds = data;
+                if (objProfile != null)
+                {
+                    objResult.profile = objProfile;
+                }
+                result.Add(objResult);
+            }
+            );
+            return Ok(new { Result = result });
         }
 
         // GET: NewFeeds/Details/5
@@ -98,7 +120,7 @@ namespace Server.Controllers
         }
 
         // POST: NewFeeds/Delete/5
-        [HttpPost("delete/{id}")]
+        [HttpGet("delete/{id}")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var newFeed = await _context.NewFeeds.FindAsync(id);

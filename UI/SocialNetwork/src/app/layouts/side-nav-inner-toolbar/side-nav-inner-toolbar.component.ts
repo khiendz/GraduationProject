@@ -32,6 +32,8 @@ export class SideNavInnerToolbarComponent implements OnInit {
   menuRevealMode = 'expand';
   minMenuSize = 0;
   shaderEnabled = false;
+  clientId: any;
+  uniqueID: string = '';
 
   constructor(private screen: ScreenService, private router: Router) { }
 

@@ -1,6 +1,13 @@
-<button (click)="editNewsFeed($event)" type="default" *ngIf="!stateEditNewsFeed" class="button-53 submit"
-  >Hey {{uniqueID}},  what are you thinking?</button
+<br />
+<button
+  (click)="editNewsFeed($event)"
+  type="default"
+  *ngIf="!stateEditNewsFeed"
+  class="button-53 submit"
+  title="Click to post new feeds"
 >
+  Hey {{ uniqueID }}, what are you thinking?
+</button>
 <dx-html-editor
   height="725px"
   [(value)]="valueContent"
@@ -65,16 +72,40 @@
     <dxi-item name="insertColumnLeft"></dxi-item>
     <dxi-item name="insertColumnRight"></dxi-item>
     <dxi-item name="deleteColumn"></dxi-item>
-    <dxi-item><dx-button text="Save" icon="save" (onClick)="Create()"></dx-button></dxi-item>
-    <dxi-item><dx-button text="Back" icon="undo" (onClick)="back()"></dx-button></dxi-item>
+    <dxi-item
+      ><dx-button text="Save" icon="save" (onClick)="Create()"></dx-button
+    ></dxi-item>
+    <dxi-item
+      ><dx-button text="Back" icon="undo" (onClick)="back()"></dx-button
+    ></dxi-item>
   </dxo-toolbar>
   <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
 </dx-html-editor>
 
-<div *ngFor="let newsFeed of listNewsFeed; let i = index" class="card-custom">
+<div *ngFor="let newsFeed of listEntity; let i = index" class="card-custom">
   <div class="content">
-    <div>Ngày đăng: {{newsFeed.datetimePost}}</div>
-    <div [innerHTML]="newsFeed.content"></div>
+    <div class="title-avatar">
+      <div class="chatbox-avatar">
+        <img src="{{ newsFeed.avatar }}" />
+      </div>
+      <div class="title-name">Author: {{ newsFeed.name }}</div>
+      <div class="title-date">
+        Ngày đăng: {{ newsFeed.datetimePost | date: "short":"M/d/yy, h:mm a" }}
+      </div>
+      <dx-drop-down-button
+        class="option"
+        [dropDownOptions]="{ width: 150 }"
+        icon="more"
+        [items]="profileSettings"
+        displayExpr="name"
+        keyExpr="id"
+        style="background-color: black"
+        [showArrowIcon]  = 'false'
+        (onItemClick)="onItemClick($event,newsFeed)"
+      ></dx-drop-down-button>
+    </div>
+    <hr />
+    <div class="data-content" [innerHTML]="newsFeed.content"></div>
     <hr />
   </div>
 </div>

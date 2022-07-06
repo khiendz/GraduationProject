@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Server.Models;
 using Microsoft.EntityFrameworkCore;
+using Server.Hubs;
 
 namespace Server.Controllers
 {

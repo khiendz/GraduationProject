@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NewsFeed } from 'src/app/shared/models/newsFeed.model';
+import { NewsFeed, NewsFeedEntity } from 'src/app/shared/models/newsFeed.model';
 import { HomeService } from './home.service';
 import { lastValueFrom } from 'rxjs';
+import { Profile } from 'src/app/shared/models/profile.model';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   templateUrl: 'home.component.html',
@@ -13,13 +15,28 @@ export class HomeComponent implements OnInit{
   valueContent: string;
   stateEditNewsFeed: boolean = false;
   listNewsFeed: NewsFeed[] = [];
+  listEntity: NewsFeedEntity[] = [];
+  listProfile: Profile[] = [];
   result: any;
   title: string;
   clientId : any;
   uniqueID : any;
 
+  profileSettings: any[] = [
+    { value: 1, name: 'Profile', icon: 'user' },
+    {
+      value: 4, name: 'Edit', icon: 'edit',
+    },
+    { value: 2, name: 'Delete', icon: 'trash' }
+  ];
+
+
   constructor(public service:HomeService)
   {
+    this.clientId = localStorage.getItem('currentUser')
+    ? JSON.parse(localStorage.getItem('currentUser') || '')
+    : [];
+    this.uniqueID = this.clientId.user;
   }
 
   async ngOnInit()
@@ -27,11 +44,6 @@ export class HomeComponent implements OnInit{
     await Promise.all([
       this.GetALL(),
     ]);
-
-    this.clientId = localStorage.getItem('currentUser')
-    ? JSON.parse(localStorage.getItem('currentUser') || '')
-    : [];
-    this.uniqueID = this.clientId.user;
     // let imgList: HTMLCollection = document.getElementsByTagName('img');
     // for(let i=0; i < imgList.length; i++)
     // {
@@ -42,9 +54,58 @@ export class HomeComponent implements OnInit{
 
   async GetALL()
   {
-    this.listNewsFeed = await lastValueFrom(
-      this.service.GetAll()
+    debugger
+    this.result = await lastValueFrom(
+      this.service.GetAll(this.clientId.idAccount)
     );
+    debugger
+    this.result.result.forEach((data: any) => {
+      debugger
+      let entityNewFeeds : NewsFeedEntity = new NewsFeedEntity();
+      entityNewFeeds.id = data.newFeeds.id;
+      entityNewFeeds.content = data.newFeeds.content;
+      entityNewFeeds.datetimePost = data.newFeeds.datetimePost;
+      entityNewFeeds.idAccount = data.newFeeds.idAccount;
+      entityNewFeeds.avatar = data.profile.avatar;
+      entityNewFeeds.name = data.profile.name;
+      this.listEntity.push(entityNewFeeds);
+    });
+
+    debugger
+    this.listEntity;
+  }
+
+  onItemClick(e: any, data: any)
+  {
+    debugger
+    if(e.itemData.name == "Edit")
+    {
+      if(data.idAccount == this.clientId.idAccount)
+      {
+        this.stateEditNewsFeed = !this.stateEditNewsFeed;
+        this.valueContent = data.content;
+      }else
+      {
+        notify("You are not the author","warring",3000);
+      }
+
+    }else if(e.itemData.name == "Delete")
+    {
+      debugger
+      if(data.idAccount == this.clientId.idAccount)
+      {
+        this.service.Delete(data.id).subscribe();
+      }else
+      {
+        notify("You are not the author","warring",3000);
+      }
+    }else
+    {
+debugger
+    }
+    debugger
+    console.log(e);
+    console.log(data);
   }
 
   async Create()
@@ -56,7 +117,8 @@ export class HomeComponent implements OnInit{
     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     let dateTime = date+' '+time;
     newFeed.datetimePost = new Date(dateTime);
-    newFeed.idAccount = "1";
+    newFeed.idAccount = this.clientId.idAccount;
+    newFeed.idAccount = this.clientId.idAccount;
     this.result = await lastValueFrom(
       this.service.Create(newFeed)
     );
@@ -66,6 +128,16 @@ export class HomeComponent implements OnInit{
     }
   }
 
+  async Delete(id: string)
+  {
+    this.result = await lastValueFrom(
+      this.service.Delete(id)
+    );
+    if(this.result)
+    {
+      window.location.reload();
+    }
+  }
   back()
   {
     this.stateEditNewsFeed = !this.stateEditNewsFeed;
