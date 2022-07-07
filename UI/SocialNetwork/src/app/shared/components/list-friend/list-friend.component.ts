@@ -123,7 +123,6 @@ export class ListFriendComponent implements OnInit {
       this._ngZone.run(() => {
         this.listConnect = connect;
         debugger;
-        console.log(connect);
       });
     });
   }
