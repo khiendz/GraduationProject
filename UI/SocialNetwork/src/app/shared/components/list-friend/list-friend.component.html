@@ -9,7 +9,7 @@
     <div *dxTemplate="let item of 'item'">
       <div class="product" (click)="selectFriend(item)">
       <img src="{{ item.avatar }}" />
-    <div>Online</div>
+    <div *ngIf="checkConnect(item.idAccount)">Online</div>
         <div class="price">{{ item.name }}</div>
       </div>
     </div>

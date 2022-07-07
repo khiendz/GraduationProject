@@ -57,6 +57,7 @@ export class ListFriendComponent implements OnInit {
     this.subscribeToEvents();
     this.chatService.connect(this.connect);
     window.addEventListener('beforeunload', () => {
+      debugger
       this.chatService._disconnect(this.connect);
   });
   }
@@ -85,15 +86,36 @@ export class ListFriendComponent implements OnInit {
     }
   }
 
+  connectOnline()
+  {
+    this.friendService
+      .getFriend(this.clientId.idAccount)
+      .subscribe((res: any) => {
+        this.friends = res;
+        this.friends.result.forEach((data: any) => {
+          this.listFriends.push(data.friend);
+          this.listProfile.push(data.profile);
+        });
+      });
+
+    this.profileService.getList().subscribe((data: any) => {
+      this.profileSource = data.filter(
+        (obj: Profile) => obj.idAccount != this.clientId.idAccount
+      );
+    });
+  }
+
   private subscribeToEvents(): void {
     if (this.uniqueID == '') {
       return;
     }
     this.chatService.connectStart.subscribe((connect: any) => {
+      debugger
       this._ngZone.run(() => {
+        debugger;
         this.listConnect = connect;
         debugger;
-        console.log(connect);
+        this.connectOnline();
       });
     });
 
@@ -104,6 +126,13 @@ export class ListFriendComponent implements OnInit {
         console.log(connect);
       });
     });
+  }
+
+  checkConnect(id: string)
+  {
+    if(this.listConnect.filter(connect => connect.idAccount == id))
+    return false;
+    return true;
   }
 }
 @NgModule({

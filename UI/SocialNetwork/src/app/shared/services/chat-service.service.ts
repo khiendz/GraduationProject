@@ -22,6 +22,7 @@ export class ChatServiceService implements OnDestroy {
   connectionEstablished = new EventEmitter<Boolean>();
   connectStart = new EventEmitter<Connect>();
   disconnect = new EventEmitter<Connect>();
+  public listConnect: Connect[] = [];
 
   private connectionIsEstablished = false;
   public _hubConnection: HubConnection;
@@ -55,10 +56,11 @@ export class ChatServiceService implements OnDestroy {
       .build();
   }
 
-  private startConnection(): void {
+  public startConnection(): void {
     this._hubConnection
       .start()
       .then(() => {
+        debugger
         this.connectionIsEstablished = true;
         console.log('Hub connection started');
         this.connectionEstablished.emit(true);

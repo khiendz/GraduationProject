@@ -48,12 +48,16 @@ namespace Server.Hubs
 
         public async Task Connected(Connect connect)
         {
+            if (UserHandler.ConnectedIds.Contains(connect))
+                return;
             UserHandler.ConnectedIds.Add(connect);
             await Clients.All.SendAsync("ConnectStart", UserHandler.ConnectedIds);
         }
 
         public async Task Disconnected(Connect connect)
         {
+            if (!UserHandler.ConnectedIds.Contains(connect))
+                return;
             UserHandler.ConnectedIds.Remove(connect);
             await Clients.All.SendAsync("Disconnect", UserHandler.ConnectedIds);
         }

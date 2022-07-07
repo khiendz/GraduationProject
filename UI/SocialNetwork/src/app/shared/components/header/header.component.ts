@@ -96,6 +96,11 @@ export class HeaderComponent implements OnInit {
       window.location.reload();
     });
   }
+
+  backHome()
+  {
+    this.router.navigate(['/home']);
+  }
 }
 
 @NgModule({
