@@ -19,6 +19,8 @@ import {
 import { ChatComponent } from 'src/app/pages/chat/chat.component';
 import { Connect } from '../../models/connect';
 import { Friend } from '../../models/friend.model';
+import { Message } from '../../models/message.model';
+import { Notify } from '../../models/notify.model';
 import { Profile } from '../../models/profile.model';
 import { ChatServiceService } from '../../services/chat-service.service';
 import { FriendService } from '../../services/friend.service';
@@ -61,7 +63,7 @@ export class ListFriendComponent implements OnInit, OnDestroy {
       window.addEventListener('beforeunload', () => {
         this.chatService._disconnect(this.connect);
     });
-    },2000);
+    },3000);
   }
   ngOnDestroy(): void {
     this.chatService._disconnect(this.connect);
@@ -70,7 +72,6 @@ export class ListFriendComponent implements OnInit, OnDestroy {
     this.friendService
       .getFriend(this.clientId.idAccount)
       .subscribe((res: any) => {
-        debugger
         this.listConnect;
         this.friends = res;
         this.friends.result.forEach((data: any) => {
@@ -124,11 +125,21 @@ export class ListFriendComponent implements OnInit, OnDestroy {
         this.connectOnline();
       });
     });
+
+    this.chatService.notifyReceived.subscribe((notify: Notify) => {
+        this._ngZone.run(() => {
+          if (notify.idfromTo === this.uniqueID) {
+            if (!this.listIdSource.find((data: any) => data == notify.idAccount)) {
+              this.listIdSource.push(notify.idAccount);
+              this.listId.emit(this.listIdSource);
+            }
+          }
+        });
+      });
   }
 
   checkConnect(id: string)
   {
-    debugger
     let value = this.listConnect.find(connect => connect.idAccount == id);
     let state = value != null ||value != undefined ?  value : null;
     if(state == null)

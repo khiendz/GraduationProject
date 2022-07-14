@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NewsFeed, NewsFeedEntity } from 'src/app/shared/models/newsFeed.model';
 import { HomeService } from './home.service';
-import { lastValueFrom } from 'rxjs';
+import { EMPTY, lastValueFrom } from 'rxjs';
 import { Profile } from 'src/app/shared/models/profile.model';
 import notify from 'devextreme/ui/notify';
 
 @Component({
+  selector: 'app-home',
   templateUrl: 'home.component.html',
   styleUrls: [ './home.component.scss' ]
 })
@@ -21,6 +22,9 @@ export class HomeComponent implements OnInit{
   title: string;
   clientId : any;
   uniqueID : any;
+  idProfile: any;
+  @Input('id') id: string = '';
+  @Input('name') name: string = '';
 
   profileSettings: any[] = [
     { value: 1, name: 'Profile', icon: 'user' },

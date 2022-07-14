@@ -5,6 +5,7 @@ import { Message } from '../models/message.model';
 import {HttpClient} from '@angular/common/http';
 import { String } from 'typescript-string-operations';
 import { Connect } from '../models/connect';
+import { Notify } from '../models/notify.model';
 
 const apiUrl = {
   getFriend : '/messages/getlistmessage/{0}/{1}',
@@ -12,7 +13,8 @@ const apiUrl = {
   detailsFriend: '/messages/details/{0}',
   updateFriend : '/messages/edit/{0}',
   deleteFriend : '/messages/delete/{0}',
-  exist : 'messages/exist/{0}'
+  exist : '/messages/exist/{0}',
+  getNotify: '/notifies/get/{0}'
 };
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,7 @@ export class ChatServiceService implements OnDestroy {
   connectionEstablished = new EventEmitter<Boolean>();
   connectStart = new EventEmitter<Connect>();
   disconnect = new EventEmitter<Connect>();
+  notifyReceived = new EventEmitter<Notify>();
   public listConnect: Connect[] = [];
 
   private connectionIsEstablished = false;
@@ -36,8 +39,19 @@ export class ChatServiceService implements OnDestroy {
 
   }
 
+  getNotify(idAccount: string)
+  {
+    const requestUrl = String.Format(apiUrl.getNotify,idAccount);
+    return this.httpClient.get(requestUrl);
+  }
+
   sendMessage(message: Message) {
     this._hubConnection.invoke('NewMessage', message);
+  }
+
+  sendNotify(notify: Notify)
+  {
+    this._hubConnection.invoke('NewNotifycation', notify);
   }
 
   connect(connect: Connect)
@@ -81,6 +95,9 @@ export class ChatServiceService implements OnDestroy {
     this._hubConnection.on('Disconnect', (data: any) => {
       this.disconnect.emit(data);
     });
+    this._hubConnection.on('NotifyReceived', (data: any) => {
+      this.notifyReceived.emit(data);
+    });
   }
 
 
@@ -89,5 +106,12 @@ export class ChatServiceService implements OnDestroy {
   {
     const requestUrl = String.Format(apiUrl.getFriend,name,clientTo);
     return this.httpClient.get(requestUrl);
+  }
+
+  playAudio(){
+    let audio = new Audio();
+    audio.src = "../../../assets/mixkit-achievement-bell-600.wav";
+    audio.load();
+    audio.play();
   }
 }

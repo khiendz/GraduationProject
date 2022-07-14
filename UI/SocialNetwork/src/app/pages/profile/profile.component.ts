@@ -14,6 +14,8 @@ export class ProfileComponent {
   file: any;
   paramSearch: any;
   stateSearch: boolean = false;
+  id: string;
+  name: string;
 
   buttonOptions: any = {
     text: 'Update',
@@ -47,6 +49,9 @@ export class ProfileComponent {
       {
       });
     }
+
+    this.id = this.paramSearch;
+    this.id = this.profile.name;
   }
 
 

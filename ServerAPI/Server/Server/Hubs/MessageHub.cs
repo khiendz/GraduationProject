@@ -70,5 +70,13 @@ namespace Server.Hubs
             await Clients.All.SendAsync("Disconnect", UserHandler.ConnectedIds);
         }
 
+        public async Task NewNotifycation(Notify notify)
+        {
+            notify.id = Guid.NewGuid().ToString();
+            await this._context.Notifys.AddAsync(notify);
+            await this._context.SaveChangesAsync();
+            await Clients.All.SendAsync("NotifyReceived", notify);
+        }
+
     }
 }

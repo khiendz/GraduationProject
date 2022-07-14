@@ -3,19 +3,6 @@
     <div class="inbox_msg">
       <div class="mesgs">
         <div class="chat-title">
-          <!-- <dx-select-box
-            class="chat-select"
-            [dataSource]="listFriends"
-            [searchEnabled]="true"
-            [searchExpr]="['name']"
-            displayExpr="name"
-            valueExpr="name"
-            [(value)]="valueSelectFriend"
-            placeholder="Select or search friend you want chat ?"
-            (onValueChanged)="selectFriend()"
-            style="background-color: #e7e7e7; border-radius: 10px"
-          >
-          </dx-select-box> -->
           <div class="chatbox-avatar">
             <a target="_blank" href="https://www.facebook.com/boxbox2000/"
               ><img [src]="avatar"
@@ -63,7 +50,7 @@
                     {{ msg.message }}
                   </p>
                   <span class="time_date">
-                    {{ msg.date | date: "medium" }}
+                    {{ msg.date | date: "short":"M/d/yy, h:mm a" }}
                   </span>
                 </div>
               </div>
@@ -73,7 +60,7 @@
                 <p>
                   {{ msg.message }}
                 </p>
-                <span class="time_date"> {{ msg.date | date: "medium" }}</span>
+                <span class="time_date"> {{ msg.date | date: "short":"M/d/yy, h:mm a" }}</span>
               </div>
             </div>
           </div>

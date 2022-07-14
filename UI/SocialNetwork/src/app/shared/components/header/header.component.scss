@@ -55,3 +55,7 @@
 ::ng-deep #textboxer .dx-texteditor-input {
   color: black;
 }
+
+::ng-deep .dx-dropdownbutton .dx-buttongroup .dx-buttongroup-first-item {
+  border: none;
+}

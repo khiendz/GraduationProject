@@ -22,10 +22,10 @@ namespace Server.Controllers
         }
 
         // GET: Notifies
-        [HttpGet("Get")]
-        public async Task<IActionResult> Index()
+        [HttpGet("Get/{idAccount}")]
+        public async Task<IActionResult> Index(string idAccount)
         {
-            return Ok(await _context.Notifys.ToListAsync());
+            return Ok(await _context.Notifys.Where(data => data.idfromTo == idAccount).ToListAsync());
         }
 
         // GET: Notifies/Details/5

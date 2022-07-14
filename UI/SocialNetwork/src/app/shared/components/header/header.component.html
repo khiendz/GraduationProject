@@ -9,42 +9,68 @@
         icon: 'menu',
         stylingMode: 'text',
         onClick: toggleMenu
-      }">
+      }"
+    >
     </dxi-item>
     <dxi-item
       location="before"
       cssClass="header-title"
       *ngIf="title"
-      [text]="title">
+      [text]="title"
+    >
     </dxi-item>
-    <dxi-item style="display: flex;" >
-      <dx-text-box id="textboxer" width="200%" height="80%" style="background-color: #e8f4fe; border-radius: 10px; color: black !important;" [(value)]="nameSearch"></dx-text-box>
-      <dx-button type="input" icon="search" (onClick)="search(nameSearch)"></dx-button>
-      <dx-button icon="home" (onClick)="backHome()" >
-      </dx-button>
-      <dx-button icon="email" class="notification">
-      </dx-button>
+    <dxi-item style="display: flex">
+      <dx-text-box
+        id="textboxer"
+        width="200%"
+        height="80%"
+        style="
+          background-color: #e8f4fe;
+          border-radius: 10px;
+          color: black !important;
+        "
+        [(value)]="nameSearch"
+      ></dx-text-box>
+      <dx-button
+        type="input"
+        icon="search"
+        (onClick)="search(nameSearch)"
+      ></dx-button>
+      <dx-button icon="home" (onClick)="backHome()"> </dx-button>
+      <dx-button icon="email" class="notification"> </dx-button>
     </dxi-item>
-    <dxi-item
-      location="after"
-      locateInMenu="auto"
-      menuItemTemplate="menuItem">
+    <dxi-item location="after" locateInMenu="auto" menuItemTemplate="menuItem">
       <div *dxTemplate="let data of 'item'">
-        <dx-button icon="globe">
-        </dx-button>
+        <dx-drop-down-button
+          [dropDownOptions]="{ width: 350, height: 600 }"
+          icon="globe"
+          [items]="notifySource"
+          displayExpr="name"
+          keyExpr="id"
+          [showArrowIcon]  = 'false'
+        ></dx-drop-down-button>
         <dx-button
           class="user-button authorization"
           width="210px"
           height="100%"
-          stylingMode="text">
+          stylingMode="text"
+        >
           <div *dxTemplate="let data of 'content'">
-            <app-user-panel [user]="user" [menuItems]="userMenuItems" menuMode="context"></app-user-panel>
+            <app-user-panel
+              [user]="user"
+              [menuItems]="userMenuItems"
+              menuMode="context"
+            ></app-user-panel>
           </div>
         </dx-button>
       </div>
     </dxi-item>
     <div *dxTemplate="let data of 'menuItem'">
-      <app-user-panel [user]="user" [menuItems]="userMenuItems" menuMode="list"></app-user-panel>
+      <app-user-panel
+        [user]="user"
+        [menuItems]="userMenuItems"
+        menuMode="list"
+      ></app-user-panel>
     </div>
   </dx-toolbar>
 </header>

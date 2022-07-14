@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } fro
 import { any } from 'codelyzer/util/function';
 import { Connect } from 'src/app/shared/models/connect';
 import { Friend } from 'src/app/shared/models/friend.model';
+import { Notify } from 'src/app/shared/models/notify.model';
 import { Profile } from 'src/app/shared/models/profile.model';
 import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
 import { FriendService } from 'src/app/shared/services/friend.service';
@@ -13,7 +14,7 @@ import { Message } from '../../shared/models/message.model';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit, OnDestroy{
+export class ChatComponent implements OnInit{
   title = 'ClientApp';
   txtMessage: string = '';
   @Input('id') id:string = '';
@@ -46,10 +47,6 @@ export class ChatComponent implements OnInit, OnDestroy{
     this.connect.userName = this.clientId.user;
     this.subscribeToEvents();
   }
-  ngOnDestroy(): void {
-    this.chatService._disconnect(this.connect);
-    this.chatService._hubConnection.stop();
-  }
   handleInput(event: any) {
     this.txtMessage = event.target!.value;
   }
@@ -70,7 +67,6 @@ export class ChatComponent implements OnInit, OnDestroy{
       this.avatar = this.profile.avatar;
     });
     this.getSourceMessage();
-    this.chatService.connect(this.connect);
   }
 
   close()
@@ -114,9 +110,16 @@ export class ChatComponent implements OnInit, OnDestroy{
       this.message.clientuniqueid = this.uniqueID;
       this.message.type = 'sent';
       this.message.message = this.txtMessage;
-      this.message.date = new Date();
+      debugger
+      this.message.date = new Date(new Date().toLocaleString());
       this.message.clientTo = this.id;
       this.messages.push(this.message);
+      let notify = new Notify();
+      notify.idAccount = this.uniqueID;
+      notify.idfromTo = this.id;
+      notify.date = new Date(new Date().toLocaleString());
+      notify.message = `${this.clientId.user} send message to you at ${notify.date.toLocaleString()}`;
+      this.chatService.sendNotify(notify);
       this.chatService.sendMessage(this.message);
       this.txtMessage = '';
     }
@@ -135,8 +138,10 @@ export class ChatComponent implements OnInit, OnDestroy{
         if (message.clientTo === this.uniqueID) {
           message.type = 'received';
           this.messages.push(message);
+          this.chatService.playAudio();
         }
       });
     });
   }
+
 }
