@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit{
   clientId : any;
   uniqueID : any;
   idProfile: any;
+  stateCheck : boolean = true;
   @Input('id') id: string = '';
   @Input('name') name: string = '';
 
@@ -45,22 +46,35 @@ export class HomeComponent implements OnInit{
 
   async ngOnInit()
   {
-    await Promise.all([
-      this.GetALL(),
-    ]);
-    // let imgList: HTMLCollection = document.getElementsByTagName('img');
-    // for(let i=0; i < imgList.length; i++)
-    // {
-    //     imgList[0].setAttribute('style','width: 500px; height: 250px');
-    // }
-
+    this.idProfile = this.clientId.idAccount;
+    debugger
+    setTimeout(async () => {
+      if(this.id)
+      {
+        this.idProfile = this.id;
+        this.stateCheck = !this.stateCheck;
+        document.getElementById('editHtml')?.setAttribute("style","display: none");
+      }
+      await Promise.all([
+        this.GetALL(),
+      ]);
+    },2000);
   }
 
   async GetALL()
   {
-    this.result = await lastValueFrom(
-      this.service.GetAll(this.clientId.idAccount)
-    );
+    debugger
+    if(this.id)
+    {
+      this.result = await lastValueFrom(
+        this.service.GetProfile(this.idProfile)
+      );
+    }else
+    {
+      this.result = await lastValueFrom(
+        this.service.GetAll(this.idProfile)
+      );
+    }
     this.result.result.forEach((data: any) => {
       let entityNewFeeds : NewsFeedEntity = new NewsFeedEntity();
       entityNewFeeds.id = data.newFeeds.id;
@@ -79,7 +93,7 @@ export class HomeComponent implements OnInit{
   {
     if(e.itemData.name == "Edit")
     {
-      if(data.idAccount == this.clientId.idAccount)
+      if(data.idAccount == this.idProfile)
       {
         this.stateEditNewsFeed = !this.stateEditNewsFeed;
         this.valueContent = data.content;
@@ -90,7 +104,7 @@ export class HomeComponent implements OnInit{
 
     }else if(e.itemData.name == "Delete")
     {
-      if(data.idAccount == this.clientId.idAccount)
+      if(data.idAccount == this.idProfile)
       {
         this.service.Delete(data.id).subscribe();
       }else
@@ -113,8 +127,8 @@ export class HomeComponent implements OnInit{
     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     let dateTime = date+' '+time;
     newFeed.datetimePost = new Date(dateTime);
-    newFeed.idAccount = this.clientId.idAccount;
-    newFeed.idAccount = this.clientId.idAccount;
+    newFeed.idAccount = this.idProfile;
+    newFeed.idAccount = this.idProfile;
     this.result = await lastValueFrom(
       this.service.Create(newFeed)
     );
@@ -129,6 +143,7 @@ export class HomeComponent implements OnInit{
     this.result = await lastValueFrom(
       this.service.Delete(id)
     );
+    window.location.reload();
     if(this.result)
     {
       window.location.reload();

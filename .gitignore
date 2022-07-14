@@ -427,3 +427,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+ServerAPI/Server/Server/Migrations/20220629190707_Migrations.cs
+ServerAPI/Server/Server/Migrations/20220629190707_Migrations.Designer.cs
+ServerAPI/Server/Server/Migrations/ApplicationDbContextModelSnapshot.cs

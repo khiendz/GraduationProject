@@ -36,7 +36,10 @@ export class ProfileComponent {
       this.stateSearch = !this.stateSearch;
       this.profileService.search(this.paramSearch).subscribe((data: any) =>
       {
+        debugger
         this.profile = data.result;
+        this.id = this.profile.idAccount;
+        this.name = this.profile.name;
         document.getElementById("form-avatar")?.setAttribute('style', `background-image: url('${this.profile.avatar}')`);
       });
     }else
@@ -49,9 +52,6 @@ export class ProfileComponent {
       {
       });
     }
-
-    this.id = this.paramSearch;
-    this.id = this.profile.name;
   }
 
 

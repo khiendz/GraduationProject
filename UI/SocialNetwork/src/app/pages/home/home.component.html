@@ -5,6 +5,7 @@
   *ngIf="!stateEditNewsFeed"
   class="button-53 submit"
   title="Click to post new feeds"
+  id="editHtml"
 >
   Hey {{ uniqueID }}, what are you thinking?
 </button>
@@ -93,6 +94,7 @@
         Ngày đăng: {{ newsFeed.datetimePost | date: "short":"M/d/yy, h:mm a" }}
       </div>
       <dx-drop-down-button
+        *ngIf="stateCheck"
         class="option"
         [dropDownOptions]="{ width: 150 }"
         icon="more"

@@ -4,6 +4,7 @@ import { String } from 'typescript-string-operations';
 
 const apiUrl = {
   GetAll: '/newFeeds/get/{0}',
+  GetAllProfile: '/newFeeds/getprofile/{0}',
   GetDetailsId: '/newFeeds/details/{0}',
   Create: '/newFeeds/create',
   Edit: '/newFeeds/edit/{0}',
@@ -23,6 +24,11 @@ export class HomeService {
 
   public GetAll(idAccount: string){
     const requestUrl = String.Format(apiUrl.GetAll,idAccount);
+    return this.httpClient.get<any>(requestUrl);
+  }
+
+  public GetProfile(idAccount: string){
+    const requestUrl = String.Format(apiUrl.GetAllProfile,idAccount);
     return this.httpClient.get<any>(requestUrl);
   }
 

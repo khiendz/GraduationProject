@@ -13,6 +13,7 @@
           accept="image/*"
           uploadMode="useForm"
           (onValueChanged)="updateClick($event)"
+          *ngIf="!this.stateSearch"
         >
         </dx-file-uploader>
       </div>
@@ -40,4 +41,4 @@
 </dx-form>
 </form>
 </div>
-<app-home [id]="id" [name]="this.name"></app-home>
+<app-home [id]="this.id" [name]="this.name"></app-home>

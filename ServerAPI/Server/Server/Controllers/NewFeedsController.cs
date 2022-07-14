@@ -50,6 +50,28 @@ namespace Server.Controllers
             return Ok(new { Result = result });
         }
 
+        // GET: NewFeeds
+        [HttpGet("GetProfile/{idAccount}")]
+        public async Task<IActionResult> GetWithProfile(string idAccount)
+        {
+
+            var listNewFeeds = await _context.NewFeeds.OrderByDescending(x => x.datetimePost).Where(data => ((data.idAccount == idAccount))).ToListAsync();
+            var result = new List<NewFeedsResponse>();
+            listNewFeeds.ForEach(data =>
+            {
+                var objProfile = _context.Profiles.FirstOrDefault(profile => profile.idAccount == data.idAccount);
+                var objResult = new NewFeedsResponse();
+                objResult.newFeeds = data;
+                if (objProfile != null)
+                {
+                    objResult.profile = objProfile;
+                }
+                result.Add(objResult);
+            }
+            );
+            return Ok(new { Result = result });
+        }
+
         // GET: NewFeeds/Details/5
         [HttpGet("details/{id}")]
         public async Task<IActionResult> Details(string id)
