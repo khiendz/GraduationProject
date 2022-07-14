@@ -37,7 +37,6 @@ export class HomeVideoCallComponent implements OnInit, OnDestroy{
   constructor(
       private readonly videoChatService: VideochatService) { }
   ngOnDestroy(): void {
-    debugger
     this.notificationHub.stop();
     this.onLeaveRoom(true);
   }

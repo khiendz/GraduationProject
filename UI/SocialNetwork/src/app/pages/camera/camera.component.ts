@@ -42,7 +42,6 @@ export class CameraComponent implements AfterViewInit  {
 
 private async initializeDevice(deviceId?: string) {
   try {
-    debugger
       this.isInitializing = true;
 
       this.finalizePreview();
@@ -58,7 +57,6 @@ private async initializeDevice(deviceId?: string) {
         this.renderer.appendChild(this.previewElement.nativeElement, videoElement);
       }catch(e: any)
       {
-        debugger
        console.log(e);
       }
   } finally {

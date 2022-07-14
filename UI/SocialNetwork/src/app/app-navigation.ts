@@ -19,11 +19,6 @@ export const navigation = [
         icon: 'group'
       },
       {
-        text: 'Chats',
-        path: '/chats',
-        icon: 'comment'
-      },
-      {
         text: 'Group Call',
         path: '/call',
         icon: 'tel'

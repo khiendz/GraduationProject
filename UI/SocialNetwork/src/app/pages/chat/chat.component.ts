@@ -132,26 +132,10 @@ export class ChatComponent implements OnInit, OnDestroy{
     }
     this.chatService.messageReceived.subscribe((message: Message) => {
       this._ngZone.run(() => {
-        debugger;
         if (message.clientTo === this.uniqueID) {
-          debugger;
           message.type = 'received';
           this.messages.push(message);
         }
-      });
-    });
-
-    this.chatService.connectStart.subscribe((connect: any) => {
-      this._ngZone.run(() => {
-        debugger;
-        console.log(connect);
-      });
-    });
-
-    this.chatService.disconnect.subscribe((connect: any) => {
-      this._ngZone.run(() => {
-        debugger;
-        console.log(connect);
       });
     });
   }

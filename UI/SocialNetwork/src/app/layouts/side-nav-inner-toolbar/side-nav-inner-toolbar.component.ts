@@ -13,6 +13,8 @@ import { ChatsModule } from 'src/app/shared/components/chat/chat.component';
 import { ChatComponent } from 'src/app/pages/chat/chat.component';
 import { DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import { ListFriendComponent, ListFriendModule } from 'src/app/shared/components/list-friend/list-friend.component';
+import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
+import { Connect } from 'src/app/shared/models/connect';
 
 @Component({
   selector: 'app-side-nav-inner-toolbar',
@@ -34,12 +36,18 @@ export class SideNavInnerToolbarComponent implements OnInit {
   shaderEnabled = false;
   clientId: any;
   uniqueID: string = '';
+  connect: Connect = new Connect();
 
-  constructor(private screen: ScreenService, private router: Router) { }
+  constructor(private screen: ScreenService, private router: Router, private chatService: ChatServiceService) { }
 
   ngOnInit() {
     this.menuOpened = this.screen.sizes['screen-large'];
-
+    this.clientId = localStorage.getItem('currentUser')
+      ? JSON.parse(localStorage.getItem('currentUser') || '')
+      : [];
+    this.uniqueID = this.clientId.idAccount;
+    this.connect.idAccount = this.uniqueID;
+    this.connect.userName = this.clientId.user;
     this.router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
         this.selectedRoute = val.urlAfterRedirects.split('?')[0];
@@ -47,7 +55,11 @@ export class SideNavInnerToolbarComponent implements OnInit {
     });
 
     this.screen.changed.subscribe(() => this.updateDrawer());
-
+    setTimeout(() => {
+      window.addEventListener('beforeunload', () => {
+        this.chatService._disconnect(this.connect);
+    });
+    },2000);
     this.updateDrawer();
   }
 
@@ -103,15 +115,14 @@ export class SideNavInnerToolbarComponent implements OnInit {
     }
   }
 
-  addItemToListId(e:any)
-  {
+  addItemToListId(e: any) {
     this.listId = e;
   }
 }
 
 @NgModule({
-  imports: [ SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule, ChatsModule, DxSelectBoxModule, DxButtonModule, ListFriendModule ],
-  exports: [ SideNavInnerToolbarComponent ],
-  declarations: [ SideNavInnerToolbarComponent, ChatComponent ]
+  imports: [SideNavigationMenuModule, DxDrawerModule, HeaderModule, DxToolbarModule, DxScrollViewModule, CommonModule, ChatsModule, DxSelectBoxModule, DxButtonModule, ListFriendModule],
+  exports: [SideNavInnerToolbarComponent],
+  declarations: [SideNavInnerToolbarComponent, ChatComponent]
 })
 export class SideNavInnerToolbarModule { }

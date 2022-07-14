@@ -7,10 +7,18 @@
     searchMode="contains"
   >
     <div *dxTemplate="let item of 'item'">
-      <div class="product" (click)="selectFriend(item)">
-      <img src="{{ item.avatar }}" />
-    <div *ngIf="checkConnect(item.idAccount)">Online</div>
-        <div class="price">{{ item.name }}</div>
+      <div *ngIf="checkConnect(item.idAccount)">
+        <div class="product" (click)="selectFriend(item)">
+          <img src="{{ item.avatar }}" style="background: green;"/>
+        <div>Online</div>
+            <div class="price">{{ item.name }}</div>
+          </div>
+      </div>
+      <div *ngIf="!checkConnect(item.idAccount)">
+        <div class="product" (click)="selectFriend(item)">
+          <img src="{{ item.avatar }}"/>
+            <div class="price">{{ item.name }}</div>
+          </div>
       </div>
     </div>
   </dx-list>

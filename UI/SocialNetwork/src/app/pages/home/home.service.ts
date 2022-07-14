@@ -22,7 +22,6 @@ export class HomeService {
   ) { }
 
   public GetAll(idAccount: string){
-    debugger
     const requestUrl = String.Format(apiUrl.GetAll,idAccount);
     return this.httpClient.get<any>(requestUrl);
   }

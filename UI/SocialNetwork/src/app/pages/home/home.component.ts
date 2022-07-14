@@ -54,13 +54,10 @@ export class HomeComponent implements OnInit{
 
   async GetALL()
   {
-    debugger
     this.result = await lastValueFrom(
       this.service.GetAll(this.clientId.idAccount)
     );
-    debugger
     this.result.result.forEach((data: any) => {
-      debugger
       let entityNewFeeds : NewsFeedEntity = new NewsFeedEntity();
       entityNewFeeds.id = data.newFeeds.id;
       entityNewFeeds.content = data.newFeeds.content;
@@ -71,13 +68,11 @@ export class HomeComponent implements OnInit{
       this.listEntity.push(entityNewFeeds);
     });
 
-    debugger
     this.listEntity;
   }
 
   onItemClick(e: any, data: any)
   {
-    debugger
     if(e.itemData.name == "Edit")
     {
       if(data.idAccount == this.clientId.idAccount)
@@ -91,7 +86,6 @@ export class HomeComponent implements OnInit{
 
     }else if(e.itemData.name == "Delete")
     {
-      debugger
       if(data.idAccount == this.clientId.idAccount)
       {
         this.service.Delete(data.id).subscribe();
@@ -101,9 +95,7 @@ export class HomeComponent implements OnInit{
       }
     }else
     {
-debugger
     }
-    debugger
     console.log(e);
     console.log(data);
   }

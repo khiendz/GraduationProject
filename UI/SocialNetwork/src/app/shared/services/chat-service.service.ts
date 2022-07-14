@@ -43,6 +43,7 @@ export class ChatServiceService implements OnDestroy {
   connect(connect: Connect)
   {
     this._hubConnection.invoke('Connected',connect);
+    console.log("Connected");
   }
 
   _disconnect(connect: Connect)
@@ -60,7 +61,6 @@ export class ChatServiceService implements OnDestroy {
     this._hubConnection
       .start()
       .then(() => {
-        debugger
         this.connectionIsEstablished = true;
         console.log('Hub connection started');
         this.connectionEstablished.emit(true);

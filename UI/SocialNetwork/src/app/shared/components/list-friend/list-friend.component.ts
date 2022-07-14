@@ -4,6 +4,7 @@ import {
   EventEmitter,
   NgModule,
   NgZone,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -29,7 +30,7 @@ import { ChatsModule } from '../chat/chat.component';
   templateUrl: './list-friend.component.html',
   styleUrls: ['./list-friend.component.scss'],
 })
-export class ListFriendComponent implements OnInit {
+export class ListFriendComponent implements OnInit, OnDestroy {
   friends: any;
   friendSource: Friend[] = [];
   listFriends: Friend[] = [];
@@ -54,29 +55,29 @@ export class ListFriendComponent implements OnInit {
     this.uniqueID = this.clientId.idAccount;
     this.connect.idAccount = this.uniqueID;
     this.connect.userName = this.clientId.user;
-    this.subscribeToEvents();
-    this.chatService.connect(this.connect);
-    window.addEventListener('beforeunload', () => {
-      debugger
-      this.chatService._disconnect(this.connect);
-  });
+    setTimeout(() => {
+      this.subscribeToEvents();
+      this.chatService.connect(this.connect);
+      window.addEventListener('beforeunload', () => {
+        this.chatService._disconnect(this.connect);
+    });
+    },2000);
+  }
+  ngOnDestroy(): void {
+    this.chatService._disconnect(this.connect);
   }
   ngOnInit(): void {
     this.friendService
       .getFriend(this.clientId.idAccount)
       .subscribe((res: any) => {
+        debugger
+        this.listConnect;
         this.friends = res;
         this.friends.result.forEach((data: any) => {
           this.listFriends.push(data.friend);
           this.listProfile.push(data.profile);
         });
       });
-
-    this.profileService.getList().subscribe((data: any) => {
-      this.profileSource = data.filter(
-        (obj: Profile) => obj.idAccount != this.clientId.idAccount
-      );
-    });
   }
 
   selectFriend(e: any) {
@@ -99,6 +100,7 @@ export class ListFriendComponent implements OnInit {
       });
 
     this.profileService.getList().subscribe((data: any) => {
+      this.listConnect;
       this.profileSource = data.filter(
         (obj: Profile) => obj.idAccount != this.clientId.idAccount
       );
@@ -110,11 +112,8 @@ export class ListFriendComponent implements OnInit {
       return;
     }
     this.chatService.connectStart.subscribe((connect: any) => {
-      debugger
       this._ngZone.run(() => {
-        debugger;
         this.listConnect = connect;
-        debugger;
         this.connectOnline();
       });
     });
@@ -122,15 +121,20 @@ export class ListFriendComponent implements OnInit {
     this.chatService.disconnect.subscribe((connect: any) => {
       this._ngZone.run(() => {
         this.listConnect = connect;
-        debugger;
+        this.connectOnline();
       });
     });
   }
 
   checkConnect(id: string)
   {
-    if(this.listConnect.filter(connect => connect.idAccount == id))
-    return false;
+    debugger
+    let value = this.listConnect.find(connect => connect.idAccount == id);
+    let state = value != null ||value != undefined ?  value : null;
+    if(state == null)
+    {
+      return false;
+    }
     return true;
   }
 }

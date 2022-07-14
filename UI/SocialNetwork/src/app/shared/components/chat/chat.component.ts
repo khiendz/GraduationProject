@@ -28,7 +28,6 @@ export class ChatsComponent implements OnInit {
 
   }
   sendMessage(): void {
-    debugger
     if (this.txtMessage) {
       this.message = new Message();
       this.message.clientuniqueid = this.uniqueID;
