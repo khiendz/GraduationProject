@@ -4,6 +4,8 @@ import { HomeService } from './home.service';
 import { EMPTY, lastValueFrom } from 'rxjs';
 import { Profile } from 'src/app/shared/models/profile.model';
 import notify from 'devextreme/ui/notify';
+import { Route, Router, RouterLinkActive } from '@angular/router';
+import { RouteAddedEvent } from 'devextreme/ui/map';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +38,7 @@ export class HomeComponent implements OnInit{
   ];
 
 
-  constructor(public service:HomeService)
+  constructor(public service:HomeService, private router: Router)
   {
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -69,6 +71,11 @@ export class HomeComponent implements OnInit{
       this.result = await lastValueFrom(
         this.service.GetProfile(this.idProfile)
       );
+    }else if(this.name == "profile")
+    {
+      this.result = await lastValueFrom(
+        this.service.GetProfile(this.idProfile)
+      );
     }else
     {
       this.result = await lastValueFrom(
@@ -91,6 +98,7 @@ export class HomeComponent implements OnInit{
 
   onItemClick(e: any, data: any)
   {
+    debugger
     if(e.itemData.name == "Edit")
     {
       if(data.idAccount == this.idProfile)
@@ -99,7 +107,7 @@ export class HomeComponent implements OnInit{
         this.valueContent = data.content;
       }else
       {
-        notify("You are not the author","warring",3000);
+        notify("You are not the author","success",3000);
       }
 
     }else if(e.itemData.name == "Delete")
@@ -109,10 +117,15 @@ export class HomeComponent implements OnInit{
         this.service.Delete(data.id).subscribe();
       }else
       {
-        notify("You are not the author","warring",3000);
+        notify("You are not the author","success",3000);
       }
     }else
     {
+      this.router
+      .navigate(['/profile'], { queryParams: { name: data.name } })
+      .then(() => {
+        window.location.reload();
+      });
     }
     console.log(e);
     console.log(data);

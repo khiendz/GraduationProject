@@ -70,7 +70,7 @@ export class SettingsComponent implements OnInit, OnDestroy  {
       if (!this.camera.videoTrack || this.videoDeviceId !== this.video?.selectedId) {
           this.videoDeviceId = this.video?.selectedId;
           const videoDevice : any = this.devices.find(d => d.deviceId === this.video?.selectedId);
-          await this.camera.initializePreview(videoDevice.deviceId);
+          await this.camera.initializePreview(videoDevice?.deviceId);
       }
 
       return this.camera.videoTrack;

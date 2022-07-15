@@ -22,5 +22,5 @@ namespace Server.Controllers
         [HttpGet("rooms")]
         public async Task<IActionResult> GetRooms()
             => new JsonResult(await _videoService.GetAllRoomsAsync());
-    }
+    }   
 }

@@ -4,7 +4,7 @@
       <div class="mesgs">
         <div class="chat-title">
           <div class="chatbox-avatar">
-            <a target="_blank" href="https://www.facebook.com/boxbox2000/"
+            <a target="_blank" [href]="'/#/profile?name='+this.profile.name"
               ><img [src]="avatar"
             /></a>
           </div>
@@ -22,7 +22,7 @@
             {{ profile.name }}
           </div>
           <div class="chat-icon">
-            <dx-button class="icon" icon="tel" type="success"> </dx-button>
+            <dx-button class="icon" icon="tel" type="success" (onClick)="call($event)"> </dx-button>
             <dx-button class="icon" icon="video" type="default"> </dx-button>
             <dx-button
               class="icon"

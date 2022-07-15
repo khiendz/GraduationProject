@@ -2,18 +2,19 @@ import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from 'src/environments/environment';
 import { Message } from '../models/message.model';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { String } from 'typescript-string-operations';
 import { Connect } from '../models/connect';
 import { Notify } from '../models/notify.model';
+import { CallRequest } from '../models/callRequest.model';
 
 const apiUrl = {
-  getFriend : '/messages/getlistmessage/{0}/{1}',
-  addFriedd : '/messages/create',
+  getFriend: '/messages/getlistmessage/{0}/{1}',
+  addFriedd: '/messages/create',
   detailsFriend: '/messages/details/{0}',
-  updateFriend : '/messages/edit/{0}',
-  deleteFriend : '/messages/delete/{0}',
-  exist : '/messages/exist/{0}',
+  updateFriend: '/messages/edit/{0}',
+  deleteFriend: '/messages/delete/{0}',
+  exist: '/messages/exist/{0}',
   getNotify: '/notifies/get/{0}'
 };
 @Injectable({
@@ -25,10 +26,13 @@ export class ChatServiceService implements OnDestroy {
   connectStart = new EventEmitter<Connect>();
   disconnect = new EventEmitter<Connect>();
   notifyReceived = new EventEmitter<Notify>();
+  caller = new EventEmitter<CallRequest>();
+  callDisconnect = new EventEmitter<CallRequest>();
   public listConnect: Connect[] = [];
 
   private connectionIsEstablished = false;
   public _hubConnection: HubConnection;
+  public audio: any;
 
   constructor(public httpClient: HttpClient) {
     this.createConnection();
@@ -39,9 +43,8 @@ export class ChatServiceService implements OnDestroy {
 
   }
 
-  getNotify(idAccount: string)
-  {
-    const requestUrl = String.Format(apiUrl.getNotify,idAccount);
+  getNotify(idAccount: string) {
+    const requestUrl = String.Format(apiUrl.getNotify, idAccount);
     return this.httpClient.get(requestUrl);
   }
 
@@ -49,20 +52,25 @@ export class ChatServiceService implements OnDestroy {
     this._hubConnection.invoke('NewMessage', message);
   }
 
-  sendNotify(notify: Notify)
-  {
+  sendNotify(notify: Notify) {
     this._hubConnection.invoke('NewNotifycation', notify);
   }
 
-  connect(connect: Connect)
-  {
-    this._hubConnection.invoke('Connected',connect);
+  call(callRq: CallRequest) {
+    this._hubConnection.invoke('Call', callRq);
+  }
+
+  _callDisconnect(callRq: CallRequest) {
+    this._hubConnection.invoke('DisconnectCall', callRq);
+  }
+
+  connect(connect: Connect) {
+    this._hubConnection.invoke('Connected', connect);
     console.log("Connected");
   }
 
-  _disconnect(connect: Connect)
-  {
-    this._hubConnection.invoke('Disconnected',connect);
+  _disconnect(connect: Connect) {
+    this._hubConnection.invoke('Disconnected', connect);
   }
 
   private createConnection() {
@@ -81,7 +89,7 @@ export class ChatServiceService implements OnDestroy {
       })
       .catch(err => {
         console.log('Error while establishing connection, retrying...');
-        setTimeout( () => { this.startConnection(); }, 5000);
+        setTimeout(() => { this.startConnection(); }, 5000);
       });
   }
 
@@ -98,20 +106,41 @@ export class ChatServiceService implements OnDestroy {
     this._hubConnection.on('NotifyReceived', (data: any) => {
       this.notifyReceived.emit(data);
     });
+    this._hubConnection.on('Caller', (data: any) => {
+      this.caller.emit(data);
+    });
+    this._hubConnection.on('CallerDisconnect', (data: any) => {
+      this.callDisconnect.emit(data);
+    });
   }
 
 
 
-  public getSourceMessage(name: string, clientTo: string)
-  {
-    const requestUrl = String.Format(apiUrl.getFriend,name,clientTo);
+  public getSourceMessage(name: string, clientTo: string) {
+    const requestUrl = String.Format(apiUrl.getFriend, name, clientTo);
     return this.httpClient.get(requestUrl);
   }
 
-  playAudio(){
-    let audio = new Audio();
-    audio.src = "../../../assets/mixkit-achievement-bell-600.wav";
-    audio.load();
-    audio.play();
+  playAudio() {
+    this.audio = new Audio();
+    this.audio.src = "../../../assets/mixkit-achievement-bell-600.wav";
+    this.audio.load();
+    this.audio.play();
   }
+
+  playAudioCall() {
+    this.audio = new Audio();
+    this.audio.src = "../../../assets/mixkit-marimba-waiting-ringtone-1360.wav";
+    this.audio.load();
+    this.audio.play();
+  }
+
+  pauseAudio() {
+    // this.audio = new Audio();
+    // this.audio.src = "../../../assets/mixkit-marimba-waiting-ringtone-1360.wav";
+    // this.audio.load();
+    this.audio.pause();
+    this.audio.currentTime = 0;
+  }
+
 }

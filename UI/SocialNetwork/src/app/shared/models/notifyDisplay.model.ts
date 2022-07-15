@@ -5,4 +5,5 @@ export class NotifyDisplay
   name : string;
   icon : string;
   bade : string;
+  _check : string;
 }

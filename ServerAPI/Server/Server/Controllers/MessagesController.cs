@@ -32,7 +32,7 @@ namespace Server.Controllers
         [HttpGet("GetListMessage/{name}/{clientTo}")]
         public async Task<IActionResult> GetListMessage(string name, string clientTo)
         {
-            return Ok(await _context.Messages.Where(data => (data.clientTo == clientTo && data.clientuniqueid == name) || (data.clientTo == name && data.clientuniqueid == clientTo) ).ToListAsync());
+            return Ok(await _context.Messages.Where(data => (data.clientTo == clientTo && data.clientuniqueid == name) || (data.clientTo == name && data.clientuniqueid == clientTo) ).OrderBy(order => order.date).ToListAsync());
         }
 
         // GET: Messages/Details/5

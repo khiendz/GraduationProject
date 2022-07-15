@@ -8,6 +8,7 @@ import { TasksComponent } from './pages/tasks/tasks.component';
 import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
 import { ChatComponent } from './pages/chat/chat.component';
 import { HomeVideoCallComponent } from './pages/home-video-call/home-video-call.component';
+import { CallComponent } from './pages/call/call.component';
 
 const routes: Routes = [
   {
@@ -57,6 +58,10 @@ const routes: Routes = [
   {
     path: 'call',
     component: HomeVideoCallComponent
+  },
+  {
+    path: 'call-user',
+    component: CallComponent
   },
   {
     path: '**',

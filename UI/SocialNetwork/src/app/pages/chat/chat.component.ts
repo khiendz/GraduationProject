@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { any } from 'codelyzer/util/function';
+import { CallRequest } from 'src/app/shared/models/callRequest.model';
 import { Connect } from 'src/app/shared/models/connect';
 import { Friend } from 'src/app/shared/models/friend.model';
 import { Notify } from 'src/app/shared/models/notify.model';
@@ -37,7 +39,8 @@ export class ChatComponent implements OnInit{
     private chatService: ChatServiceService,
     private friendService: FriendService,
     private profileService: ProfileService,
-    private _ngZone: NgZone
+    private _ngZone: NgZone,
+    private router: Router,
   ) {
     this.clientId = localStorage.getItem('currentUser')
       ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -80,6 +83,22 @@ export class ChatComponent implements OnInit{
   minimum()
   {
     this.chatDisplay = !this.chatDisplay;
+  }
+
+  call(e: any)
+  {
+    let fromUser: Profile = new Profile();
+    this.profileService.detailsProfile(this.clientId.idAccount).subscribe((data: any) => {
+      fromUser = data;
+      let callRequest: CallRequest = new CallRequest();
+    callRequest.fromUser = fromUser;
+    callRequest.toUser = this.profile.idAccount;
+    callRequest.roomName = fromUser.idAccount+callRequest.toUser;
+    debugger
+    this.chatService.call(callRequest);
+      this.router.navigate(['/call-user'], { queryParams: { name: callRequest.roomName } }).then(() => {
+      });
+    });
   }
 
   focus()

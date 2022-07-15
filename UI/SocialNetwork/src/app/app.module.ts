@@ -27,6 +27,7 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { DeviceSelectComponent } from './pages/settings/device-select/device-select.component';
 import { FriendsComponent } from './pages/friends/friends.component';
 import { ListFriendComponent } from './shared/components/list-friend/list-friend.component';
+import { CallComponent } from './pages/call/call.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ListFriendComponent } from './shared/components/list-friend/list-friend
     DeviceSelectComponent,
     FriendsComponent,
     TasksComponent,
+    CallComponent,
   ],
   imports: [
     BrowserModule,

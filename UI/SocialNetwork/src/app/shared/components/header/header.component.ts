@@ -14,7 +14,7 @@ import { UserPanelModule } from '../user-panel/user-panel.component';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxToolbarModule } from 'devextreme-angular/ui/toolbar';
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FriendService } from '../../services/friend.service';
 import { Friend } from '../../models/friend.model';
 import { Profile } from '../../models/profile.model';
@@ -24,11 +24,14 @@ import {
   DxDropDownButtonModule,
   DxFilterBuilderModule,
   DxListModule,
+  DxPopupModule,
   DxTextBoxModule,
 } from 'devextreme-angular';
 import { ChatServiceService } from '../../services/chat-service.service';
 import { Notify } from '../../models/notify.model';
 import { NotifyDisplay } from '../../models/notifyDisplay.model';
+import { CallRequest } from '../../models/callRequest.model';
+import { DxoPopupModule } from 'devextreme-angular/ui/nested';
 const _profileSettings: any[] = [
   { value: 1, name: 'Dũng đã gửi một tin nhắn mới cho bạn', icon: 'user' },
   {
@@ -62,6 +65,13 @@ export class HeaderComponent implements OnInit {
   stateSearch: boolean = false;
   friend: Friend[] = [];
   profile: Profile[] = [];
+  acceptButton: any;
+  dennyButton: any;
+  acceptAddButton: any;
+  dennyAddButton: any;
+  callState: boolean = false;
+  notifyState: boolean = false;
+  callRequest: CallRequest;
   userMenuItems = [
     {
       text: 'Profile',
@@ -82,11 +92,13 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     public friendService: FriendService,
     public profileService: ProfileService,
     public chatService: ChatServiceService,
     private _ngZone: NgZone
   ) {
+    const that = this;
     this.profileSettings = _profileSettings;
     this.clientId = localStorage.getItem('currentUser')
       ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -98,7 +110,7 @@ export class HeaderComponent implements OnInit {
         notifyMore.id = element.id;
         notifyMore.icon = "user";
         notifyMore.name = element.message;
-        notifyMore.value = element.id;
+        notifyMore.value = JSON.stringify(element);
         notifyMore.bade = '1';
         this.notifySource.push(notifyMore);
       });
@@ -106,6 +118,29 @@ export class HeaderComponent implements OnInit {
     setTimeout(() => {
       this.subscribeToEvents();
     },3000);
+
+    this.acceptButton = {
+      icon: 'tel',
+      type: 'success',
+      text: 'Accept',
+      onClick(e: any) {
+        debugger
+        setTimeout(() => {
+          that.router.navigate(['/call-user'], { queryParams: { name: that.callRequest.roomName } }).then(() => {
+            that.callState = false;
+          });
+        },2000);
+      },
+    };
+    this.dennyButton = {
+      text: 'Close',
+      type: 'default',
+      onClick(e: any) {
+        that.chatService.pauseAudio();
+        that.callState = false;
+        that.chatService._callDisconnect(that.callRequest);
+      },
+    };
   }
 
   ngOnInit() {
@@ -150,6 +185,15 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  teleCall(){
+    console.log("sad");
+    debugger
+    setTimeout(() => {
+      this.router.navigate(['/call-user'], { queryParams: { name: this.callRequest.roomName } }).then(() => {
+      });
+    },2000);
+  }
+
   subscribeToEvents(): void {
     if (this.uniqueID == '') {
       return;
@@ -170,6 +214,41 @@ export class HeaderComponent implements OnInit {
         }
       });
     });
+
+    this.chatService.caller.subscribe((call: CallRequest) => {
+      debugger
+      this._ngZone.run(() => {
+        if (call.toUser === this.uniqueID) {
+          debugger
+          this.chatService.playAudioCall();
+          this.callState = !this.callState;
+          this.callRequest = new CallRequest();
+          this.callRequest.fromUser = call.fromUser;
+          this.callRequest.toUser = call.toUser;
+          this.callRequest.roomName = call.roomName;
+        }
+      });
+    });
+
+    this.chatService.callDisconnect.subscribe((call: CallRequest) => {
+      this._ngZone.run(() => {
+        let param = "";
+        this.route.queryParams.subscribe(params => {
+          param = params['name'];
+        });
+        if (call.roomName === param) {
+          this.router.navigate(['/home']).then(() => this.chatService.pauseAudio());
+        }
+      });
+    });
+  }
+
+  onItemClick(e:any)
+  {
+    debugger
+    var dataTest: Profile = JSON.parse(e.itemData.value);
+
+    console.log(dataTest);
   }
 }
 
@@ -183,6 +262,7 @@ export class HeaderComponent implements OnInit {
     DxFilterBuilderModule,
     DxTextBoxModule,
     DxDropDownButtonModule,
+    DxPopupModule
   ],
   declarations: [HeaderComponent],
   exports: [HeaderComponent],

@@ -16,5 +16,6 @@ namespace Server.Models
         public string idAccount { get; set; }
         public string idfromTo { get; set; }
         public DateTime date { get; set; }
+        public bool _check { get; set; }
     }
 }

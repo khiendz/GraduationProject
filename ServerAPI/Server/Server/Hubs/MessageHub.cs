@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Server.Authentication;
+using Server.Entity;
 using Server.Models;
 using System;
 using System.Collections.Generic;
@@ -78,5 +79,14 @@ namespace Server.Hubs
             await Clients.All.SendAsync("NotifyReceived", notify);
         }
 
+        public async Task Call(CallRequest callRequest)
+        {
+            await Clients.All.SendAsync("Caller", callRequest);
+        }
+
+        public async Task DisconnectCall(CallRequest callRequest)
+        {
+            await Clients.All.SendAsync("CallerDisconnect", callRequest);
+        }
     }
 }

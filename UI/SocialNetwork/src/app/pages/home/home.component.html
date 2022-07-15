@@ -87,7 +87,9 @@
   <div class="content">
     <div class="title-avatar">
       <div class="chatbox-avatar">
-        <img src="{{ newsFeed.avatar }}" />
+        <a target="_blank" [href]="'/#/profile?name='+newsFeed.name"
+        >    <img src="{{ newsFeed.avatar }}" />
+      </a>
       </div>
       <div class="title-name">Author: {{ newsFeed.name }}</div>
       <div class="title-date">

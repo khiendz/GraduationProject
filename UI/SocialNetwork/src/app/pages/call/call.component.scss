@@ -1,0 +1,28 @@
+.grid-container {
+  display: flex;
+  height: 750px;
+}
+
+.grid-content {
+  flex: 3;
+  grid-area: content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(56, 56, 56);
+  border-top: solid 6px #F22F46;
+  border-bottom: solid 6px #F22F46;
+  height: 750px;
+}
+
+
+.grid-right {
+  flex: 1;
+  grid-area: right;
+  background: linear-gradient(to right, rgb(56, 56, 56) 0, transparent 100%);
+  border-top: solid 6px #F22F46;
+  border-bottom: solid 6px #F22F46;
+  height: 750px;
+}
+
+

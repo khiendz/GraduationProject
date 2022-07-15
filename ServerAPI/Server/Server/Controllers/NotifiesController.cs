@@ -25,7 +25,7 @@ namespace Server.Controllers
         [HttpGet("Get/{idAccount}")]
         public async Task<IActionResult> Index(string idAccount)
         {
-            return Ok(await _context.Notifys.Where(data => data.idfromTo == idAccount).ToListAsync());
+            return Ok(await _context.Notifys.Where(data => data.idfromTo == idAccount).OrderBy(order => order.date).ToListAsync());
         }
 
         // GET: Notifies/Details/5

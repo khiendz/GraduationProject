@@ -48,6 +48,7 @@
           displayExpr="name"
           keyExpr="id"
           [showArrowIcon]  = 'false'
+          (onItemClick)="onItemClick($event)"
         ></dx-drop-down-button>
         <dx-button
           class="user-button authorization"
@@ -73,4 +74,72 @@
       ></app-user-panel>
     </div>
   </dx-toolbar>
+  <dx-popup
+  [width]="300"
+  [height]="280"
+  [showTitle]="true"
+  title="Calling"
+  hideOnOutsideClick="true"
+  [dragEnabled]="false"
+  [showCloseButton]="false"
+  container=".dx-viewport"
+  [(visible)]="callState"
+>
+  <dxi-toolbar-item
+    type='success'
+    widget="dxButton"
+    toolbar="bottom"
+    location="before"
+    [options]="acceptButton"
+    (onclick)="teleCall()"
+  >
+  </dxi-toolbar-item>
+  <dxi-toolbar-item
+    widget="dxButton"
+    toolbar="bottom"
+    location="after"
+    [options]="dennyButton"
+  >
+  </dxi-toolbar-item>
+  <div>
+    <div class="product1">
+      <img src="{{ callRequest?.fromUser?.avatar }}"/>
+        <div class="price1">{{ callRequest?.fromUser?.name }} is calling you</div>
+      </div>
+  </div>
+</dx-popup>
+
+<dx-popup
+[width]="700"
+[height]="480"
+[showTitle]="true"
+title="Calling"
+hideOnOutsideClick="true"
+[dragEnabled]="false"
+[showCloseButton]="false"
+container=".dx-viewport"
+[(visible)]="notifyState"
+>
+<dxi-toolbar-item
+  type='success'
+  widget="dxButton"
+  toolbar="bottom"
+  location="before"
+  [options]="acceptButton"
+>
+</dxi-toolbar-item>
+<dxi-toolbar-item
+  widget="dxButton"
+  toolbar="bottom"
+  location="after"
+  [options]="dennyButton"
+>
+</dxi-toolbar-item>
+<div>
+  <div class="product1">
+    <img src="{{ callRequest?.fromUser?.avatar }}"/>
+      <div class="price1">{{ callRequest?.fromUser?.name }} is calling you</div>
+    </div>
+</div>
+</dx-popup>
 </header>

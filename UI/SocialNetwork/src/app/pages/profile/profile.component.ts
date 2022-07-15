@@ -47,6 +47,7 @@ export class ProfileComponent {
       profileService.detailsProfile(this.clientId.idAccount).subscribe((res: any) =>
       {
         this.profile = res;
+        this.name = "profile";
         document.getElementById("form-avatar")?.setAttribute('style', `background-image: url('${this.profile.avatar}')`);
       },error =>
       {

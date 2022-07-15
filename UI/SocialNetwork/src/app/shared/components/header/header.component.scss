@@ -59,3 +59,34 @@
 ::ng-deep .dx-dropdownbutton .dx-buttongroup .dx-buttongroup-first-item {
   border: none;
 }
+
+::ng-deep .product1 {
+  height: 65px;
+}
+
+::ng-deep .product1 > img {
+  height: 45px;
+  width: 45px;
+  float: left;
+  border-radius: 10px;
+  background-size: cover;
+  overflow: hidden;
+  border-radius: 50%;
+  background: white;
+  padding: 3px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.1s ease-out;
+}
+
+::ng-deep .product1 > div {
+  padding-left: 10px;
+  vertical-align: top;
+  line-height: 65px;
+  font-size: 15px;
+  float: left;
+}
+
+::ng-deep .product1 > div.price1 {
+  float: left;
+  font-size: 18px;
+}

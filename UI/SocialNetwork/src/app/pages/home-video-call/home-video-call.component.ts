@@ -18,13 +18,14 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-video-call',
   templateUrl: './home-video-call.component.html',
   styleUrls: ['./home-video-call.component.scss'],
 })
-export class HomeVideoCallComponent implements OnInit, OnDestroy{
+export class HomeVideoCallComponent implements OnInit, OnDestroy {
   @ViewChild('rooms') rooms: RoomsComponent;
   @ViewChild('camera') camera: CameraComponent;
   @ViewChild('settings') settings: SettingsComponent;
@@ -35,7 +36,7 @@ export class HomeVideoCallComponent implements OnInit, OnDestroy{
   private notificationHub: HubConnection;
 
   constructor(
-      private readonly videoChatService: VideochatService) { }
+    private readonly videoChatService: VideochatService, private router: Router) { }
   ngOnDestroy(): void {
     this.notificationHub.stop();
     this.onLeaveRoom(true);
@@ -45,88 +46,93 @@ export class HomeVideoCallComponent implements OnInit, OnDestroy{
       .configureLogging(LogLevel.Information)
       .withUrl(`${environment.apiUrl}/notificationHub`);
 
-      this.notificationHub = builder.build();
-      this.notificationHub.on('RoomsUpdated', async updated => {
-          if (updated) {
-              await this.rooms.updateRooms();
-          }
-      });
-      await this.notificationHub.start();
+    this.notificationHub = builder.build();
+    this.notificationHub.on('RoomsUpdated', async updated => {
+      if (updated) {
+        await this.rooms.updateRooms();
+      }
+    });
+    await this.notificationHub.start();
 
   }
 
   async onSettingsChanged(deviceInfo?: MediaDeviceInfo) {
     await this.camera.initializePreview(deviceInfo!.deviceId);
     if (this.settings.isPreviewing) {
-        const track: any = await this.settings.showPreviewCamera();
-        if (this.activeRoom) {
-            const localParticipant = this.activeRoom.localParticipant;
-            localParticipant.videoTracks.forEach(publication => publication.unpublish());
-            await localParticipant.publishTrack(track);
-        }
+      const track: any = await this.settings.showPreviewCamera();
+      if (this.activeRoom) {
+        const localParticipant = this.activeRoom.localParticipant;
+        localParticipant.videoTracks.forEach(publication => publication.unpublish());
+        await localParticipant.publishTrack(track);
+      }
     }
-}
+  }
 
-async onLeaveRoom(_: boolean) {
+  async onLeaveRoom(_: boolean) {
     if (this.activeRoom) {
-        this.activeRoom.disconnect();
-        this.activeRoom = null;
+      this.activeRoom.disconnect();
+      this.activeRoom = null;
     }
 
     const videoDevice = this.settings.hidePreviewCamera();
     await this.camera.initializePreview(videoDevice! && videoDevice.deviceId);
 
     this.participants.clear();
-}
+    this.router
+    .navigate(['/home'])
+    .then(() => {
+      window.location.reload();
+    });
+  }
 
-async onRoomChanged(roomName: string) {
+  async onRoomChanged(roomName: string) {
     if (roomName) {
-        if (this.activeRoom) {
-            this.activeRoom.disconnect();
-        }
+      if (this.activeRoom) {
+        this.activeRoom.disconnect();
+      }
 
-        this.camera.finalizePreview();
+      this.camera.finalizePreview();
 
-        const tracks: any = await Promise.all([
-            createLocalAudioTrack(),
-            this.settings.showPreviewCamera()
-        ]);
-        this.activeRoom =
-            await this.videoChatService
-                      .joinOrCreateRoom(roomName, tracks);
+      const tracks: any = await Promise.all([
+        createLocalAudioTrack(),
+        this.settings.showPreviewCamera()
+      ]);
+      this.activeRoom =
+        await this.videoChatService
+          .joinOrCreateRoom(roomName, tracks);
 
-        this.participants.initialize(this.activeRoom!.participants);
-        this.registerRoomEvents();
+      this.participants?.initialize(this.activeRoom!?.participants);
+      this.registerRoomEvents();
 
-        this.notificationHub.send('RoomsUpdated', true);
+      this.notificationHub.send('RoomsUpdated', true);
     }
-}
+  }
 
-onParticipantsChanged(_: boolean) {
+  onParticipantsChanged(_: boolean) {
     this.videoChatService.nudge();
-}
+  }
 
-private registerRoomEvents() {
+  private registerRoomEvents() {
     this.activeRoom!
-        .on('disconnected',
-            (room: Room) => room.localParticipant.tracks.forEach(publication => this.detachLocalTrack(publication.track)))
-        .on('participantConnected',
-            (participant: RemoteParticipant) => this.participants.add(participant))
-        .on('participantDisconnected',
-            (participant: RemoteParticipant) => this.participants.remove(participant))
-        .on('dominantSpeakerChanged',
-            (dominantSpeaker: RemoteParticipant) => this.participants.loudest(dominantSpeaker));
-}
+      .on('disconnected',
+        (room: Room) => room.localParticipant.tracks.forEach(publication => this.detachLocalTrack(publication.track)))
+      .on('participantConnected',
+        (participant: RemoteParticipant) => this.participants.add(participant))
+      .on('participantDisconnected',
+        (participant: RemoteParticipant) => this.participants.remove(participant))
+      .on('dominantSpeakerChanged',
+        (dominantSpeaker: RemoteParticipant) => this.participants.loudest(dominantSpeaker));
+  }
 
-private detachLocalTrack(track: LocalTrack) {
+  private detachLocalTrack(track: LocalTrack) {
     if (this.isDetachable(track)) {
-        track.detach().forEach(el => el.remove());
+      track.detach().forEach(el => el.remove());
     }
-}
+  }
 
-private isDetachable(track: LocalTrack): track is LocalAudioTrack | LocalVideoTrack {
+  private isDetachable(track: LocalTrack): track is LocalAudioTrack | LocalVideoTrack {
     return !!track
-        && ((track as LocalAudioTrack).detach !== undefined
-            || (track as LocalVideoTrack).detach !== undefined);
-}
+      && ((track as LocalAudioTrack).detach !== undefined
+        || (track as LocalVideoTrack).detach !== undefined);
+  }
 }
