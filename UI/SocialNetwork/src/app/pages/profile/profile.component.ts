@@ -3,6 +3,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import {HttpClient} from '@angular/common/http'
 import { Profile } from 'src/app/shared/models/profile.model';
 import { ProfileService } from 'src/app/shared/services/profile.service';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   templateUrl: 'profile.component.html',
@@ -38,7 +39,6 @@ export class ProfileComponent {
       this.stateSearch = !this.stateSearch;
       this.profileService.search(this.paramSearch).subscribe((data: any) =>
       {
-        debugger
         this.profile = data.result;
         this.id = this.profile.idAccount;
         this.name = this.profile.name;
@@ -57,29 +57,23 @@ export class ProfileComponent {
     }
   }
 
-  onFileChanged(event: any) {
-    debugger
-    this.files = event.target.files;
-  }
-
-  onUpload() {
-    const formData: any = new FormData();
-    for (const file of this.files) {
-        formData.append(name, file, file.name);
-    }
-    this.http.post('url', formData).subscribe(x => {
-      debugger
-      console.log(x);
-    });
-  }
-
-
   updateClick(e:any) {
     this.profile.avatar = e.value[0].name;
   }
 
   submitForm()
   {
-    this.profileService.updateProfile(this.profile).subscribe();
+    this.profileService.updateProfile(this.profile).subscribe((success: any) =>
+    {
+      if(success.result == "Update profile success")
+      {
+        notify(success.result,"success",3000);
+      }else
+      {
+        notify(success.result,"success",3000);
+      }
+    },(error: any) => {
+      notify(error,"success",3000);
+    });
   }
 }

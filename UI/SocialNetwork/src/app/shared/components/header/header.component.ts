@@ -120,7 +120,6 @@ export class HeaderComponent implements OnInit {
         notifyMore.id = element.id;
         notifyMore.icon = "user";
         notifyMore.name = element.message;
-        debugger
         notifyMore.value = await lastValueFrom(
           this.profileService.detailsProfile(element.idAccount
         ));
@@ -138,7 +137,6 @@ export class HeaderComponent implements OnInit {
       type: 'success',
       text: 'Accept',
       onClick(e: any) {
-        debugger
         setTimeout(() => {
           that.router.navigate(['/call-user'], { queryParams: { name: that.callRequest.roomName } }).then(() => {
             that.callState = false;
@@ -161,7 +159,6 @@ export class HeaderComponent implements OnInit {
       type: 'success',
       text: 'Accept',
       onClick(e: any) {
-        debugger
         that.notifyState = false;
         if(that.notifySelect?.notify.name.includes("friend"))
         {
@@ -187,7 +184,6 @@ export class HeaderComponent implements OnInit {
     _friend.name = profile?.name ?? '';
     await this.friendService.addFriend(_friend).subscribe(
     );
-    debugger
     let notify = new Notify();
     notify.idAccount = this.clientId.idAccount;
     notify.idfromTo = profile?.idAccount;
@@ -240,7 +236,6 @@ export class HeaderComponent implements OnInit {
 
   teleCall(){
     console.log("sad");
-    debugger
     setTimeout(() => {
       this.router.navigate(['/call-user'], { queryParams: { name: this.callRequest.roomName } }).then(() => {
       });
@@ -254,7 +249,6 @@ export class HeaderComponent implements OnInit {
     this.chatService.notifyReceived.subscribe((notify: Notify) => {
       this._ngZone.run(() => {
         if (notify.idfromTo === this.uniqueID) {
-          debugger
           this.chatService.playAudio();
           let notifyMore = new NotifyDisplay();
           notifyMore.id = notify.id;
@@ -269,10 +263,8 @@ export class HeaderComponent implements OnInit {
     });
 
     this.chatService.caller.subscribe((call: CallRequest) => {
-      debugger
       this._ngZone.run(() => {
         if (call.toUser === this.uniqueID) {
-          debugger
           this.chatService.playAudioCall();
           this.callState = !this.callState;
           this.callRequest = new CallRequest();
@@ -298,7 +290,6 @@ export class HeaderComponent implements OnInit {
 
   onItemClick(e:any)
   {
-    debugger
     let profile = e.itemData.value;
     this.notifySelect = new NotifySelect();
     this.notifySelect.notify = e.itemData;

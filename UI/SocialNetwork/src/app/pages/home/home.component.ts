@@ -49,7 +49,6 @@ export class HomeComponent implements OnInit{
   async ngOnInit()
   {
     this.idProfile = this.clientId.idAccount;
-    debugger
     setTimeout(async () => {
       if(this.id)
       {
@@ -65,7 +64,6 @@ export class HomeComponent implements OnInit{
 
   async GetALL()
   {
-    debugger
     if(this.id)
     {
       this.result = await lastValueFrom(
@@ -98,7 +96,6 @@ export class HomeComponent implements OnInit{
 
   onItemClick(e: any, data: any)
   {
-    debugger
     if(e.itemData.name == "Edit")
     {
       if(data.idAccount == this.idProfile)

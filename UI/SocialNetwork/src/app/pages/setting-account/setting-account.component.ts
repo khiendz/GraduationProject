@@ -28,7 +28,6 @@ export class SettingAccountComponent implements OnInit {
   };
 
   constructor(private authen: AuthenticationService) {
-debugger
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
     : [];
@@ -41,12 +40,10 @@ debugger
 
   changePassword(e: any)
   {
-    debugger
     this.account.Email = this.clientId.email;
 
     this.authen.change(this.account).subscribe((success: any) =>
     {
-      debugger
       if(success.status == "Success")
       {
         notify(success.message,"success",3000);
@@ -55,7 +52,6 @@ debugger
         notify(success.message,"success",3000);
       }
     },(error: any) => {
-      debugger
       notify(error,"success",3000);
     });
   }

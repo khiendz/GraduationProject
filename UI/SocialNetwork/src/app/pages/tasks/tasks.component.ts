@@ -91,7 +91,6 @@ export class TasksComponent {
         this.reloadDataSource();
       }
     );
-    debugger
     let notify = new Notify();
     notify.idAccount = this.clientId.idAccount;
     notify.idfromTo = profile?.idAccount;

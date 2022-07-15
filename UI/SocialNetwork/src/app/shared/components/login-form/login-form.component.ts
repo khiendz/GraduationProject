@@ -62,7 +62,6 @@ export class LoginFormComponent {
       notify("Authentication failed","warrring",3000)
     }
 
-    // debugger
     // this.manageUser.getUserByUserName(username).subscribe(
     //   res => {
     //     localStorage.setItem('accountUser', JSON.stringify(res));

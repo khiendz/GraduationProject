@@ -56,7 +56,6 @@ export class ChatComponent implements OnInit{
   ngOnInit(): void {
     // this.friendService.getFriend(this.clientId.idAccount).subscribe((res:any) =>
     // {
-    //   debugger
     //   this.friends = res;
     //   this.friends.result.forEach((data: any) =>
     //     {
@@ -94,7 +93,6 @@ export class ChatComponent implements OnInit{
     callRequest.fromUser = fromUser;
     callRequest.toUser = this.profile.idAccount;
     callRequest.roomName = fromUser.idAccount+callRequest.toUser;
-    debugger
     this.chatService.call(callRequest);
       this.router.navigate(['/call-user'], { queryParams: { name: callRequest.roomName } }).then(() => {
       });
@@ -129,7 +127,6 @@ export class ChatComponent implements OnInit{
       this.message.clientuniqueid = this.uniqueID;
       this.message.type = 'sent';
       this.message.message = this.txtMessage;
-      debugger
       this.message.date = new Date(new Date().toLocaleString());
       this.message.clientTo = this.id;
       this.messages.push(this.message);
