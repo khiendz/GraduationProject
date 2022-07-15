@@ -28,6 +28,8 @@ import { DeviceSelectComponent } from './pages/settings/device-select/device-sel
 import { FriendsComponent } from './pages/friends/friends.component';
 import { ListFriendComponent } from './shared/components/list-friend/list-friend.component';
 import { CallComponent } from './pages/call/call.component';
+import { SettingAccountComponent } from './pages/setting-account/setting-account.component';
+import { HttpClient } from '@microsoft/signalr';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { CallComponent } from './pages/call/call.component';
     FriendsComponent,
     TasksComponent,
     CallComponent,
+    SettingAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,14 +74,14 @@ import { CallComponent } from './pages/call/call.component';
     DxSelectBoxModule,
     DxDataGridModule,
     DxListModule,
-    DxDropDownButtonModule
+    DxDropDownButtonModule,
   ],
   providers: [
     AuthService,
     ScreenService,
     AppInfoService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

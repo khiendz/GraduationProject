@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import {HttpClient} from '@angular/common/http'
 import { Profile } from 'src/app/shared/models/profile.model';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 
@@ -16,6 +17,7 @@ export class ProfileComponent {
   stateSearch: boolean = false;
   id: string;
   name: string;
+  public files: any[];
 
   buttonOptions: any = {
     text: 'Update',
@@ -23,7 +25,7 @@ export class ProfileComponent {
     useSubmitBehavior: true,
   };
 
-  constructor(public profileService: ProfileService, private route:ActivatedRoute) {
+  constructor(public profileService: ProfileService, private route:ActivatedRoute, private http: HttpClient) {
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
     : [];
@@ -53,6 +55,22 @@ export class ProfileComponent {
       {
       });
     }
+  }
+
+  onFileChanged(event: any) {
+    debugger
+    this.files = event.target.files;
+  }
+
+  onUpload() {
+    const formData: any = new FormData();
+    for (const file of this.files) {
+        formData.append(name, file, file.name);
+    }
+    this.http.post('url', formData).subscribe(x => {
+      debugger
+      console.log(x);
+    });
   }
 
 

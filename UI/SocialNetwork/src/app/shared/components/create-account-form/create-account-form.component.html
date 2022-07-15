@@ -10,17 +10,20 @@
 
     <dxi-item dataField="name" editorType="dxTextBox"
       [editorOptions]="{ stylingMode: 'filled', placeholder: 'User Name', mode: 'name' }">
+      <dxi-validation-rule type="required" message="Name is required"></dxi-validation-rule>
+      <dxi-validation-rule type="text" message="Name is invalid"></dxi-validation-rule>
+      <dxo-label [visible]="false"></dxo-label>
     </dxi-item>
 
     <dxi-item dataField="password" editorType="dxTextBox"
       [editorOptions]="{ stylingMode: 'filled', placeholder: 'Password', mode: 'password' }">
-      <dxi-validation-rule type="required" message="Password is required"></dxi-validation-rule>
+      <dxi-validation-rule type="required" message="Password is required and min 8 characters, 1 special character, 1 uppercase letter"></dxi-validation-rule>
       <dxo-label [visible]="false"></dxo-label>
     </dxi-item>
 
     <dxi-item dataField="confirmedPassword" editorType="dxTextBox"
       [editorOptions]="{ stylingMode: 'filled', placeholder: 'Confirm Password', mode: 'password' }">
-      <dxi-validation-rule type="required" message="Password is required"></dxi-validation-rule>
+      <dxi-validation-rule type="required" message="Password is required and min 8 characters, 1 special character, 1 uppercase letter"></dxi-validation-rule>
       <dxi-validation-rule type="custom" message="Passwords do not match" [validationCallback]="confirmPassword">
       </dxi-validation-rule>
       <dxo-label [visible]="false"></dxo-label>

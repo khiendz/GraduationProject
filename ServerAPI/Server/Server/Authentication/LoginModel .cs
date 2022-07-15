@@ -9,4 +9,13 @@ namespace Server.Authentication
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
+
+    public class ChangeModel
+    {
+        public string Email { get; set; }
+
+        public string currentPassword { get; set; }
+
+        public string newPassword { get; set; }
+    }
 }

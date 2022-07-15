@@ -9,6 +9,7 @@ import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
 import { ChatComponent } from './pages/chat/chat.component';
 import { HomeVideoCallComponent } from './pages/home-video-call/home-video-call.component';
 import { CallComponent } from './pages/call/call.component';
+import { SettingAccountComponent } from './pages/setting-account/setting-account.component';
 
 const routes: Routes = [
   {
@@ -41,7 +42,7 @@ const routes: Routes = [
     component: CreateAccountFormComponent
   },
   {
-    path: 'change-password/:recoveryCode',
+    path: 'change-password',
     component: ChangePasswordFormComponent,
     canActivate: [ AuthGuardService ]
   },
@@ -62,6 +63,10 @@ const routes: Routes = [
   {
     path: 'call-user',
     component: CallComponent
+  },
+  {
+    path: 'change',
+    component: SettingAccountComponent
   },
   {
     path: '**',

@@ -31,7 +31,9 @@
   >
   </dxi-column>
   <div *dxTemplate="let data of 'cellTemplate'">
-    <img [src]="data.value" />
+    <a target="_blank" [href]="'/#/profile?name='+data.data.name"
+    >    <img [src]="data.value" />
+    </a>
   </div>
   <dxi-column dataField="name" [width]="240" [hidingPriority]="2"> </dxi-column>
   <dxi-column dataField="date" [width]="120" [hidingPriority]="2"  cellTemplate="cellTemplateDate"> </dxi-column>

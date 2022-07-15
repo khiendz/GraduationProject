@@ -119,5 +119,30 @@ namespace Server.Controllers
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
+
+
+        [HttpPost]
+        [Route("change")]
+        public async Task<IActionResult> Change([FromBody] ChangeModel model)
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            var result = await userManager.ChangePasswordAsync(user, model.currentPassword, model.newPassword);
+            if (!result.Succeeded)
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User change password failed! Please check user details and try again." });
+
+            try
+            {
+                var account = context?.Accounts?.FirstOrDefaultAsync(data => data.userName == model.Email)?.Result;
+                account.password = model.newPassword;
+                this.context.Update(account);
+                  _ = await this.context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = e.Message });
+            }
+
+            return Ok(new Response { Status = "Success", Message = "User change password successfully!" });
+        }
     }
 }

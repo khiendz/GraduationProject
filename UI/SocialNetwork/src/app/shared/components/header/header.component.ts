@@ -84,8 +84,15 @@ export class HeaderComponent implements OnInit {
       },
     },
     {
+      text: 'Setting',
+      icon: 'preferences',
+      onClick: () => {
+        this.router.navigate(['/change']);
+      },
+    },
+    {
       text: 'Logout',
-      icon: 'runner',
+      icon: 'export',
       onClick: () => {
         this.authService.logOut();
       },

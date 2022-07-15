@@ -1,0 +1,47 @@
+<div class="form-parent">
+  <form action="your-action" (submit)="changePassword($event)">
+    <dx-form id="form" [formData]="account">
+      <dxi-item itemType="group" cssClass="first-group" [colCount]="1">
+        <br />
+        <div class="title">
+          <dxi-item dataField="avatar" class="title-avatar">
+            <img id="form-avatar" [src]="clientId.avatar" alt="" />
+          </dxi-item>
+          <div class="title-name">
+            <h2>
+              <strong>Profile: {{ clientId.user }}</strong>
+            </h2>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
+        <dxi-item itemType="group">
+          <dxi-item
+            dataField="currentPassword"
+            [editorOptions]="{
+              stylingMode: 'filled',
+              placeholder: 'Current Password',
+              mode: 'password'
+            }"
+          >
+          <dxi-validation-rule type="required" message="Current Password is required"></dxi-validation-rule>
+          <dxo-label [visible]="true"></dxo-label>
+        </dxi-item>
+          <dxi-item
+            dataField="newPassword"
+            [editorOptions]="{ placeholder: 'New Password', mode: 'password' }"
+          >
+          <dxi-validation-rule type="required" message="New Password is required"></dxi-validation-rule>
+          <dxo-label [visible]="true"></dxo-label>
+        </dxi-item>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item
+        itemType="button"
+        horizontalAlignment="center"
+        [buttonOptions]="buttonOptions"
+      >
+      </dxi-item>
+    </dx-form>
+  </form>
+</div>
