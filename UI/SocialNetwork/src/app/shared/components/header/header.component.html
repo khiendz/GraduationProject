@@ -111,9 +111,9 @@
 
 <dx-popup
 [width]="700"
-[height]="480"
+[height]="280"
 [showTitle]="true"
-title="Calling"
+title="Notify"
 hideOnOutsideClick="true"
 [dragEnabled]="false"
 [showCloseButton]="false"
@@ -125,20 +125,21 @@ container=".dx-viewport"
   widget="dxButton"
   toolbar="bottom"
   location="before"
-  [options]="acceptButton"
+  [options]="acceptAddButton"
 >
 </dxi-toolbar-item>
 <dxi-toolbar-item
   widget="dxButton"
   toolbar="bottom"
   location="after"
-  [options]="dennyButton"
+  [options]="dennyAddButton"
 >
 </dxi-toolbar-item>
 <div>
   <div class="product1">
-    <img src="{{ callRequest?.fromUser?.avatar }}"/>
-      <div class="price1">{{ callRequest?.fromUser?.name }} is calling you</div>
+    <img src="{{ notifySelect?.profile?.avatar }}"/>
+      <div class="price1">{{ notifySelect?.profile?.name }}</div>
+      <div>{{notifySelect?.notify?.name}}</div>
     </div>
 </div>
 </dx-popup>

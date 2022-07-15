@@ -25,7 +25,7 @@ namespace Server.Controllers
         [HttpGet("Get/{idAccount}")]
         public async Task<IActionResult> Index(string idAccount)
         {
-            return Ok(await _context.Notifys.Where(data => data.idfromTo == idAccount).OrderBy(order => order.date).ToListAsync());
+            return Ok(await _context.Notifys.Where(data => data.idfromTo == idAccount).OrderByDescending(order => order.date).ToListAsync());
         }
 
         // GET: Notifies/Details/5
@@ -45,6 +45,40 @@ namespace Server.Controllers
             }
 
             return Ok(notify);
+        }
+
+        // GET: Notifies/Details/5
+        [HttpGet("check/{idNotify}")]
+        public async Task<IActionResult> Check(string idNotify)
+        {
+            if (idNotify == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var obj = _context.Notifys.Where(data => data.id == idNotify).FirstOrDefault();
+                    obj._check = true;
+                    _context.Notifys.Update(obj);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!NotifyExists(idNotify))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return Ok(new { Result = "Update notify success" });
+            }
+            return Ok(new { Result = "Update notify fail" });
         }
 
         // POST: Notifies/Create

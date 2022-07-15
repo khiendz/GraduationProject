@@ -29,9 +29,11 @@ import {
 } from 'devextreme-angular';
 import { ChatServiceService } from '../../services/chat-service.service';
 import { Notify } from '../../models/notify.model';
-import { NotifyDisplay } from '../../models/notifyDisplay.model';
+import { NotifyDisplay, NotifySelect } from '../../models/notifyDisplay.model';
 import { CallRequest } from '../../models/callRequest.model';
 import { DxoPopupModule } from 'devextreme-angular/ui/nested';
+import { lastValueFrom } from 'rxjs';
+import notify from 'devextreme/ui/notify';
 const _profileSettings: any[] = [
   { value: 1, name: 'Dũng đã gửi một tin nhắn mới cho bạn', icon: 'user' },
   {
@@ -72,6 +74,7 @@ export class HeaderComponent implements OnInit {
   callState: boolean = false;
   notifyState: boolean = false;
   callRequest: CallRequest;
+  notifySelect: NotifySelect;
   userMenuItems = [
     {
       text: 'Profile',
@@ -105,13 +108,17 @@ export class HeaderComponent implements OnInit {
       : [];
     this.uniqueID = this.clientId.idAccount;
     this.chatService.getNotify(this.clientId.idAccount).subscribe((data: any) => {
-      data.forEach((element: Notify) => {
+      data.forEach(async (element: Notify) => {
         let notifyMore = new NotifyDisplay();
         notifyMore.id = element.id;
         notifyMore.icon = "user";
         notifyMore.name = element.message;
-        notifyMore.value = JSON.stringify(element);
-        notifyMore.bade = '1';
+        debugger
+        notifyMore.value = await lastValueFrom(
+          this.profileService.detailsProfile(element.idAccount
+        ));
+        if(!element._check)
+        notifyMore.badge = "1";
         this.notifySource.push(notifyMore);
       });
     });
@@ -141,6 +148,45 @@ export class HeaderComponent implements OnInit {
         that.chatService._callDisconnect(that.callRequest);
       },
     };
+
+    this.acceptAddButton = {
+      icon: 'check',
+      type: 'success',
+      text: 'Accept',
+      onClick(e: any) {
+        debugger
+        that.notifyState = false;
+        if(that.notifySelect?.notify.name.includes("friend"))
+        {
+          that.addFriend(that.notifySelect.profile);
+          notify(`You added friends with ${that.notifySelect.profile.name}`,"success",3000);
+        }
+      },
+    };
+    this.dennyAddButton = {
+      text: 'Close',
+      type: 'default',
+      onClick(e: any) {
+        that.notifyState = false;
+      },
+    };
+  }
+
+  async addFriend(profile: any) {
+    let _friend = new Friend();
+
+    _friend.idAccount = this.clientId.idAccount;
+    _friend.idFriend = profile?.idAccount ?? '';
+    _friend.name = profile?.name ?? '';
+    await this.friendService.addFriend(_friend).subscribe(
+    );
+    debugger
+    let notify = new Notify();
+    notify.idAccount = this.clientId.idAccount;
+    notify.idfromTo = profile?.idAccount;
+    notify.date = new Date(new Date().toLocaleString());
+    notify.message = `${this.clientId.user} send friend invitations to you at ${notify.date.toLocaleString()}`;
+    this.chatService.sendNotify(notify);
   }
 
   ngOnInit() {
@@ -208,7 +254,7 @@ export class HeaderComponent implements OnInit {
           notifyMore.icon = "user";
           notifyMore.name = notify.message;
           notifyMore.value = notify.id;
-          notifyMore.bade = '1';
+          notifyMore.badge = '1';
           this.notifySource.push(notifyMore);
           this.chatService.playAudio();
         }
@@ -246,9 +292,12 @@ export class HeaderComponent implements OnInit {
   onItemClick(e:any)
   {
     debugger
-    var dataTest: Profile = JSON.parse(e.itemData.value);
-
-    console.log(dataTest);
+    let profile = e.itemData.value;
+    this.notifySelect = new NotifySelect();
+    this.notifySelect.notify = e.itemData;
+    this.notifySelect.profile = profile;
+    this.chatService.checkNotify(e.itemData.id).subscribe();
+    this.notifyState = !this.notifyState;
   }
 }
 

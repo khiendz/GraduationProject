@@ -5,4 +5,5 @@ export class Notify
   idAccount : string;
   idfromTo : string;
   date: Date;
+  _check: boolean;
 }

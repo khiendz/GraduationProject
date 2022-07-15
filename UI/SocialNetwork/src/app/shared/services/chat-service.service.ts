@@ -15,7 +15,8 @@ const apiUrl = {
   updateFriend: '/messages/edit/{0}',
   deleteFriend: '/messages/delete/{0}',
   exist: '/messages/exist/{0}',
-  getNotify: '/notifies/get/{0}'
+  getNotify: '/notifies/get/{0}',
+  checkNotify: '/notifies/check/{0}'
 };
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,11 @@ export class ChatServiceService implements OnDestroy {
 
   getNotify(idAccount: string) {
     const requestUrl = String.Format(apiUrl.getNotify, idAccount);
+    return this.httpClient.get(requestUrl);
+  }
+
+  checkNotify(idAccount: string) {
+    const requestUrl = String.Format(apiUrl.checkNotify, idAccount);
     return this.httpClient.get(requestUrl);
   }
 
