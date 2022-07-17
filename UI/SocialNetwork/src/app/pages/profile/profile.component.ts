@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http'
 import { Profile } from 'src/app/shared/models/profile.model';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import notify from 'devextreme/ui/notify';
+import { LocalService } from 'src/app/shared/services/local.service';
 
 @Component({
   templateUrl: 'profile.component.html',
@@ -21,12 +22,12 @@ export class ProfileComponent {
   public files: any[];
 
   buttonOptions: any = {
-    text: 'Update',
+    text: this.formatMessage('Update'),
     type: 'default',
     useSubmitBehavior: true,
   };
 
-  constructor(public profileService: ProfileService, private route:ActivatedRoute, private http: HttpClient) {
+  constructor(public profileService: ProfileService, private route:ActivatedRoute, private http: HttpClient, private local: LocalService) {
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
     : [];
@@ -75,5 +76,11 @@ export class ProfileComponent {
     },(error: any) => {
       notify(error,"success",3000);
     });
+  }
+
+  formatMessage(key: any)
+  {
+    let data = this.local.formatMessage(key);
+    return data;
   }
 }

@@ -110,13 +110,9 @@ namespace Server.Controllers
         // POST: NewFeeds/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("edit/{id}")]
-        public async Task<IActionResult> Edit(string id, [FromBody] NewFeed newFeed)
+        [HttpPost("edit")]
+        public async Task<IActionResult> Edit([FromBody] NewFeed newFeed)
         {
-            if (id != newFeed.id)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -138,7 +134,7 @@ namespace Server.Controllers
                 }
                 return Ok(new { Result = "Update new feeds success" });
             }
-            return Ok(newFeed);
+            return Ok(new { Result = "Update new feeds failse" });
         }
 
         // POST: NewFeeds/Delete/5

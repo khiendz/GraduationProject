@@ -26,3 +26,32 @@ export const navigation = [
     ]
   }
 ];
+
+export const navigationVn = [
+  {
+    text: 'Trang chủ',
+    path: '/home',
+    icon: 'home'
+  },
+  {
+    text: 'Tính năng',
+    icon: 'video',
+    items: [
+      {
+        text: 'Hồ sơ',
+        path: '/profile',
+        icon: 'user'
+      },
+      {
+        text: 'Bạn bè',
+        path: '/tasks',
+        icon: 'group'
+      },
+      {
+        text: 'Gọi nhóm',
+        path: '/call',
+        icon: 'tel'
+      }
+    ]
+  }
+];

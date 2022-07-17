@@ -7,7 +7,7 @@ const apiUrl = {
   GetAllProfile: '/newFeeds/getprofile/{0}',
   GetDetailsId: '/newFeeds/details/{0}',
   Create: '/newFeeds/create',
-  Edit: '/newFeeds/edit/{0}',
+  Edit: '/newFeeds/edit',
   Delete: '/newFeeds/delete/{0}',
   Exits: '/newFeeds/exists/{0}',
 }
@@ -43,7 +43,7 @@ export class HomeService {
   }
 
   public Edit(newsFeed:any){
-    const requestUrl = String.Format(apiUrl.Create,newsFeed.id);
+    const requestUrl = String.Format(apiUrl.Edit);
     return this.httpClient.post<any>(requestUrl,newsFeed);
   }
 

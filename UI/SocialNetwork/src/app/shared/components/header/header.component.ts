@@ -34,6 +34,7 @@ import { CallRequest } from '../../models/callRequest.model';
 import { DxoPopupModule } from 'devextreme-angular/ui/nested';
 import { lastValueFrom } from 'rxjs';
 import notify from 'devextreme/ui/notify';
+import { LocalService } from '../../services/local.service';
 const _profileSettings: any[] = [
   { value: 1, name: 'Dũng đã gửi một tin nhắn mới cho bạn', icon: 'user' },
   {
@@ -53,7 +54,7 @@ const _profileSettings: any[] = [
 export class HeaderComponent implements OnInit {
   @Output()
   menuToggle = new EventEmitter<boolean>();
-
+  @Output() langue = new EventEmitter<any>();
   @Input()
   menuToggleEnabled = false;
   profileSettings: any[];
@@ -75,6 +76,7 @@ export class HeaderComponent implements OnInit {
   notifyState: boolean = false;
   callRequest: CallRequest;
   notifySelect: NotifySelect;
+  localList: any;
   userMenuItems = [
     {
       text: 'Profile',
@@ -105,10 +107,12 @@ export class HeaderComponent implements OnInit {
     private route: ActivatedRoute,
     public friendService: FriendService,
     public profileService: ProfileService,
+    public local: LocalService,
     public chatService: ChatServiceService,
     private _ngZone: NgZone
   ) {
     const that = this;
+    this.localList = this.local.locales;
     this.profileSettings = _profileSettings;
     this.clientId = localStorage.getItem('currentUser')
       ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -296,6 +300,18 @@ export class HeaderComponent implements OnInit {
     this.notifySelect.profile = profile;
     this.chatService.checkNotify(e.itemData.id).subscribe();
     this.notifyState = !this.notifyState;
+  }
+
+  onItemClickLocal(e:any)
+  {
+    debugger
+    this.local.changeLocale(e.itemData.Value);
+  }
+
+  formatMessage()
+  {
+    debugger
+    let check = this.local.formatMessage('Contact');
   }
 }
 

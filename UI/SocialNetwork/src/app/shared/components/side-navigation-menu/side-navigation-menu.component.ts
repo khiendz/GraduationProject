@@ -1,7 +1,7 @@
 import { Component, NgModule, Output, Input, EventEmitter, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { ItemClickEvent } from 'devextreme/ui/tree_view';
 import { DxTreeViewModule, DxTreeViewComponent } from 'devextreme-angular/ui/tree-view';
-import { navigation } from '../../../app-navigation';
+import { navigation, navigationVn } from '../../../app-navigation';
 
 import * as events from 'devextreme/events';
 
@@ -34,12 +34,25 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy {
   private _items!: Record <string, unknown>[];
   get items() {
     if (!this._items) {
-      this._items = navigation.map((item) => {
-        if(item.path && !(/^\//.test(item.path))){
-          item.path = `/${item.path}`;
-        }
-         return { ...item, expanded: !this._compactMode }
-        });
+      const locale = sessionStorage.getItem('locale');
+      if(locale != 'de')
+      {
+        this._items = navigation.map((item) => {
+          if(item.path && !(/^\//.test(item.path))){
+            item.path = `/${item.path}`;
+          }
+           return { ...item, expanded: !this._compactMode }
+          });
+      }else
+      {
+        this._items = navigationVn.map((item) => {
+          if(item.path && !(/^\//.test(item.path))){
+            item.path = `/${item.path}`;
+          }
+           return { ...item, expanded: !this._compactMode }
+          });
+      }
+
     }
 
     return this._items;

@@ -6,6 +6,7 @@ import { Profile } from 'src/app/shared/models/profile.model';
 import notify from 'devextreme/ui/notify';
 import { Route, Router, RouterLinkActive } from '@angular/router';
 import { RouteAddedEvent } from 'devextreme/ui/map';
+import { LocalService } from 'src/app/shared/services/local.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,9 @@ export class HomeComponent implements OnInit{
   clientId : any;
   uniqueID : any;
   idProfile: any;
+  idNF: any;
   stateCheck : boolean = true;
+  stateEdit: boolean = false;
   @Input('id') id: string = '';
   @Input('name') name: string = '';
 
@@ -38,7 +41,7 @@ export class HomeComponent implements OnInit{
   ];
 
 
-  constructor(public service:HomeService, private router: Router)
+  constructor(public service:HomeService, private router: Router, private local: LocalService)
   {
     this.clientId = localStorage.getItem('currentUser')
     ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -101,7 +104,9 @@ export class HomeComponent implements OnInit{
       if(data.idAccount == this.idProfile)
       {
         this.stateEditNewsFeed = !this.stateEditNewsFeed;
+        this.stateEdit = !this.stateEdit;
         this.valueContent = data.content;
+        this.id = data.id;
       }else
       {
         notify("You are not the author","success",3000);
@@ -111,7 +116,14 @@ export class HomeComponent implements OnInit{
     {
       if(data.idAccount == this.idProfile)
       {
-        this.service.Delete(data.id).subscribe();
+        this.service.Delete(data.id).subscribe((success) => {
+          notify("Delete success","success",3000);
+          window.location.reload();
+        },(error: any) =>
+        {
+          notify("Delete failse","success",3000);
+          window.location.reload();
+        });
       }else
       {
         notify("You are not the author","success",3000);
@@ -139,9 +151,21 @@ export class HomeComponent implements OnInit{
     newFeed.datetimePost = new Date(dateTime);
     newFeed.idAccount = this.idProfile;
     newFeed.idAccount = this.idProfile;
-    this.result = await lastValueFrom(
-      this.service.Create(newFeed)
-    );
+    debugger
+    if(this.stateEdit)
+    {
+      newFeed.id = this.id;
+      this.result = await lastValueFrom(
+        this.service.Edit(newFeed)
+      );
+      this.stateEdit = !this.stateEdit;
+    }else
+    {
+      this.result = await lastValueFrom(
+        this.service.Create(newFeed)
+      );
+    }
+
     if(this.result)
     {
       window.location.reload();
@@ -166,6 +190,14 @@ export class HomeComponent implements OnInit{
 
   editNewsFeed(e:any)
   {
+    debugger
     this.stateEditNewsFeed = !this.stateEditNewsFeed;
   }
+
+  formatMessage(key: any)
+  {
+    let data = this.local.formatMessage(key);
+    return data;
+  }
+
 }

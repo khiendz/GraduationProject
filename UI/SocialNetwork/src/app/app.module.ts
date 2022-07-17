@@ -30,6 +30,7 @@ import { ListFriendComponent } from './shared/components/list-friend/list-friend
 import { CallComponent } from './pages/call/call.component';
 import { SettingAccountComponent } from './pages/setting-account/setting-account.component';
 import { HttpClient } from '@microsoft/signalr';
+import { LocalService } from './shared/services/local.service';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { HttpClient } from '@microsoft/signalr';
     AuthService,
     ScreenService,
     AppInfoService,
+    LocalService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

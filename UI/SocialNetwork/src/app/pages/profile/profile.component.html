@@ -18,17 +18,17 @@
         </dx-file-uploader>
       </div>
     </dxi-item>
-    <div class="title-name"><h2><strong>Profile: {{profile.name}}</strong></h2></div>
+    <div class="title-name"><h2><strong>{{formatMessage('Profile')}}: {{profile.name}}</strong></h2></div>
   </div>
   </dxi-item>
   <dxi-item itemType="group" cssClass="second-group" [colCount]="1">
     <dxi-item itemType="group">
-      <dxi-item dataField="name"></dxi-item>
-      <dxi-item dataField="date"   editorType="dxDateBox"
+      <dxi-item [label]="formatMessage('Name')" dataField="name"></dxi-item>
+      <dxi-item [label]="formatMessage('Date')"  dataField="date" editorType="dxDateBox"
       [editorOptions]="{ width: '100%' }"></dxi-item>
-      <dxi-item dataField="sex"></dxi-item>
-      <dxi-item dataField="age"></dxi-item>
-      <dxi-item dataField="location"></dxi-item>
+      <dxi-item [label]="formatMessage('Sex')" dataField="sex"></dxi-item>
+      <dxi-item [label]="formatMessage('Age')" dataField="age"></dxi-item>
+      <dxi-item [label]="formatMessage('Location')" dataField="location"></dxi-item>
     </dxi-item>
   </dxi-item>
     <dxi-item

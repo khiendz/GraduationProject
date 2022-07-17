@@ -15,6 +15,7 @@ import { DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import { ListFriendComponent, ListFriendModule } from 'src/app/shared/components/list-friend/list-friend.component';
 import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
 import { Connect } from 'src/app/shared/models/connect';
+import { LocalService } from 'src/app/shared/services/local.service';
 
 @Component({
   selector: 'app-side-nav-inner-toolbar',
@@ -38,7 +39,7 @@ export class SideNavInnerToolbarComponent implements OnInit {
   uniqueID: string = '';
   connect: Connect = new Connect();
 
-  constructor(private screen: ScreenService, private router: Router, private chatService: ChatServiceService) { }
+  constructor(private screen: ScreenService, private router: Router, private chatService: ChatServiceService, private local: LocalService) { }
 
   ngOnInit() {
     this.menuOpened = this.screen.sizes['screen-large'];
@@ -117,6 +118,12 @@ export class SideNavInnerToolbarComponent implements OnInit {
 
   addItemToListId(e: any) {
     this.listId = e;
+  }
+
+  formatMessage(key: any)
+  {
+    let data = this.local.formatMessage(key);
+    return data;
   }
 }
 

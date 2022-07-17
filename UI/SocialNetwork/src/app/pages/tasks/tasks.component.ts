@@ -6,6 +6,7 @@ import { Notify } from 'src/app/shared/models/notify.model';
 import { Profile } from 'src/app/shared/models/profile.model';
 import { ChatServiceService } from 'src/app/shared/services/chat-service.service';
 import { FriendService } from 'src/app/shared/services/friend.service';
+import { LocalService } from 'src/app/shared/services/local.service';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { Message } from '../../shared/models/message.model';
 
@@ -37,7 +38,8 @@ export class TasksComponent {
     public profileService: ProfileService,
     public router: Router,
     public route: ActivatedRoute,
-    public chatService: ChatServiceService
+    public chatService: ChatServiceService,
+    private local: LocalService,
   ) {
     this.clientId = localStorage.getItem('currentUser')
       ? JSON.parse(localStorage.getItem('currentUser') || '')
@@ -142,5 +144,11 @@ export class TasksComponent {
 
   submitForm() {
     this.profile = this.profileSource[0];
+  }
+
+  formatMessage(key: any)
+  {
+    let data = this.local.formatMessage(key);
+    return data;
   }
 }
